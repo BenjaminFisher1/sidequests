@@ -1,0 +1,12 @@
+@import "tailwindcss";
+@import "@nuxt/ui";
+
+@theme {
+    --font-sans: 'Wallpoet', monospace;
+    --gradient: bg-linear-152 from-black to- [#008202]
+}
+
+body {
+    background: #000000;
+    background: linear-gradient(152deg,rgba(0, 0, 0, 1) 0%, rgba(0, 130, 2, 1) 100%);
+}
