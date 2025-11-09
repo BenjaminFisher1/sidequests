@@ -7,11 +7,10 @@
     --color-quest: oklch(0.338 0.106 329.844);
     --color-violet: #210518;
     --color-purple: #bd5de9;
-    --color-aqua: #21a7ac;
+    --color-aqua: #21989d;
     --color-light-purple: #813394;
 }
 
 body {
-    background: #000;
-    background: url("~/assets/starbg.gif") center;
+    background: #000 url("~/assets/starbg.gif") center;
 }

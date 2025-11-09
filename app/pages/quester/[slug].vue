@@ -4,9 +4,6 @@ const client = useSupabaseClient()
 const {data} = await client.from("profiles").select().eq("username", slug).single()
 
 const allQuests = await client.from("quests").select().eq("host_id", data!.id)
-
-console.log(data)
-console.log(allQuests.data)
 </script>
 
 <template>

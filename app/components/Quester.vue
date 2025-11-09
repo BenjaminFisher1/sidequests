@@ -3,11 +3,13 @@ import type {Tables} from "~/types/database.types";
 
 const props = defineProps<{
   id: string
+  color?: string
 }>()
 
 const quester = ref()
 const questerLink = ref()
 const magic = ref()
+const color = props.color || "bg-violet"
 
 onMounted(async () => {
   await nextTick()
@@ -23,7 +25,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="rounded-full flex bg-violet p-3 size-fit items-center text-sm">
+  <div id="quester" class="bg-violet rounded-full flex p-3 size-fit items-center text-sm text-amber-50">
     <u>
       <NuxtLink :to="questerLink">{{ quester }}</NuxtLink>
     </u>
@@ -32,13 +34,12 @@ onMounted(async () => {
       <UIcon name="solar:star-fall-bold" class="scale-125"/>
       <p class="font-extrabold">{{ magic }}</p>
     </div>
-
-
-
   </div>
 
 </template>
 
 <style scoped>
-
+#quester {
+  background-color: v-bind(color);
+}
 </style>

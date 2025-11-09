@@ -59,6 +59,6 @@ async function huzzah() {
   <div @click="huzzah" class="max-h-10 flex">
     <img v-if="huzzahed" src="~/assets/huzzah_filled.gif" alt="filled huzzah"/>
     <img v-if="!huzzahed" src="~/assets/huzzah_hollow.gif" alt="hollow huzzah"/>
-    <p>{{ huzzahs }}</p>
+    <p class="ml-2 mt-2">{{ huzzahs }}</p>
   </div>
 </template>

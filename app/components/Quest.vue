@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import type {Database, Tables, Enums} from "~/types/database.types";
+import type {Tables} from "~/types/database.types";
 import {gsap} from "gsap";
+import JoinQuest from "~/components/JoinQuest.vue";
 
 const props = defineProps<{
   data: Tables<"quests">
@@ -8,6 +9,7 @@ const props = defineProps<{
 
 const questMaster = ref()
 const questMasterLink = ref()
+const comment = ref('')
 
 onMounted(async () => {
   await nextTick()
@@ -38,67 +40,61 @@ function whenIsQuest(start: string, end: string) {
   const hours = Math.floor(totalSeconds / 3600);
   const days = Math.floor(hours / 24);
 
-  const startsIn = "starts in "
+  const startsIn = "quest starts in "
 
   if (days >= 1)
-    return `${startsIn} ${days}d`;
+    return `${startsIn} ${days} days`;
   if (hours > 1)
-    return `${startsIn} ${hours}h`;
+    return `${startsIn} ${hours} hours`;
   if (minutes >= 1)
-    return `${startsIn} ${minutes}m`;
+    return `${startsIn} ${minutes} mins`;
   else
     return "happening Right Now!"
 }
 
-function formatDate(date: string) {
-  const d = new Date(date);
-  const months = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'];
-  const days = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
-  const month = months[d.getMonth()];
-
-  const hours = d.getHours()
-  const ampm = hours < 12 ? 'am' : 'pm'
-  const getHour = hours > 12 ? hours - 12 : hours
-  const getMinutes = d.getMinutes() < 10 ? '0' + d.getMinutes() : d.getMinutes()
-  const time = `${getHour}:${getMinutes}${ampm}`
-
-  return `${time} ${days[d.getDay()]} ${month} ${d.getDate()}`;
-}
-
-function getQuesters(data: string) {
-
-}
-
-function getComments() {
-
-}
-
+const comments = await useSupabaseClient().from("comments").select().eq("quest_id", props.data.id)
+console.log(comments.data)
 </script>
 
 <template>
-  <div class="questPost rounded-t-3xl bg-quest opacity-80 p-4 pb-2 flex flex-col font-mono text-amber-50">
-    <Quester :id="data.host_id"/>
+  <div class="questPost opacity-80">
+    <div class="rounded-t-3xl bg-quest p-4 flex flex-col font-mono text-amber-50">
+      <Quester :id="data.host_id"/>
 
-    <i class="text-2xl font-extrabold mt-2">{{ data.title }}</i>
-    <p class="text-sm">{{ data.description }}</p>
+      <i class="text-2xl font-extrabold mt-2">{{ data.title }}</i>
+      <p class="text-sm">{{ data.description }}</p>
 
-    <div class="bg-light-purple rounded-3xl p-4 my-4">
-      <div class="flex items-center">
-        <UIcon name="material-symbols:map-pin-heart-rounded"></UIcon>
-        <p>{{ data.location }}</p>
+      <div class="bg-light-purple rounded-3xl p-4 my-4">
+        <div class="flex items-center">
+          <UIcon name="material-symbols:map-pin-heart-rounded"></UIcon>
+          <p>{{ data.location }}</p>
+        </div>
+
+        <p class="text-sm text-quest font-bold">{{ whenIsQuest(data.start_time!, data.end_time!) }}</p>
+        <p>starts: {{ formatDate(data.start_time!) }}</p>
+        <p>ends: {{ formatDate(data.end_time!) }}</p>
       </div>
 
-      <p class="text-sm text-quest font-bold">{{ whenIsQuest(data.start_time!, data.end_time!) }}</p>
-      <p>starts: {{ formatDate(data.start_time!) }}</p>
-      <p>ends: {{ formatDate(data.end_time!) }}</p>
+      <div class="grid grid-cols-3">
+        <Huzzah class="justify-start" :questID="data.id"/>
+
+        <div></div>
+
+        <JoinQuest :questID="data.id"></JoinQuest>
+      </div>
     </div>
+    <div class="rounded-b-3xl p-4 bg-aqua">
+      <p class="text-sm">comments</p>
 
-    <Huzzah :questID="data.id"/>
-  </div>
-  <div>
+      <Comment v-for="comment in comments.data" :data="comment"></Comment>
 
+      <div class="flex">
+        <UTextarea class="mt-3 rounded-3xl w-full" v-model="comment" placeholder="leave a comment!" />
+
+      </div>
+    </div>
   </div>
-</template>
+ </template>
 
 <style scoped>
 .questPost {
