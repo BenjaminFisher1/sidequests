@@ -39,8 +39,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
       imageStoragePath = data?.fullPath
   }
 
-  const user = await useSupabaseClient().auth.getUser()
-  const userID = user.data.user!.id
+  const userID = await getCurrentUserID()
 
   const {data, error} = await client.from('quests').insert({
     host_id: userID,

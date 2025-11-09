@@ -22,9 +22,9 @@ const route = useSupabaseSession().value ? '/home' : '/index'
     <img id="logo" class="opacity-0" src="~/assets/sidequests.gif" alt="sidequests logo">
     <p class="font-extrabold text-2xl mt-4 ">a new magical adventure in the domain of your very own community! </p>
 
-    <div class="rounded-full bg-pink-700 my-6">
-      <UButton class="text-3xl font-bold text-black" variant="ghost" icon="solar:star-fall-bold" size="xl" :to="route">start questing!!!</UButton>
-    </div>
+    <NuxtLink :to="route" class="my-6">
+      <img src="~/assets/startquesting.gif" alt="start questing!" />
+    </NuxtLink>
 
 
     <p class="text-5xl text-green-500">bored?<br> go on a <u>sidequest!</u></p>

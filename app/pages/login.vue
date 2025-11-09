@@ -76,9 +76,7 @@ const signUp = async (username: string, email: string, password: string) => {
     })
 
     signIn(email, password).then(async () => {
-      const user = await useSupabaseClient().auth.getUser()
-      const userID = user.data.user!.id
-
+      const userID = await getCurrentUserID()
       await supabase.from('profiles').insert({id: userID, username: username})
     })
   }

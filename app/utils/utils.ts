@@ -16,3 +16,8 @@ export function toastError(msg: string) {
         color: 'error',
     })
 }
+
+export async function getCurrentUserID() {
+    const user = await useSupabaseClient().auth.getUser()
+    return user.data.user!.id
+}
