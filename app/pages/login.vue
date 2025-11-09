@@ -1,10 +1,10 @@
 <script setup lang="ts">
 //code template from https://github.com/nuxt-modules/supabase/blob/main/demo/pages/login.vue
 import type {FormSubmitEvent} from "#ui/types";
+import type {AuthFormField} from '@nuxt/ui'
 
 const supabase = useSupabaseClient()
 const user = useSupabaseUser()
-
 const toast = useToast()
 
 const sign = ref<'in' | 'up'>('in')
@@ -15,32 +15,43 @@ watchEffect(() => {
   }
 })
 
-const fields = [{
-  name: 'email',
-  type: 'text' as const,
-  label: 'Email',
-  placeholder: 'Enter your email',
-  required: true,
-}, {
-  name: 'password',
-  label: 'Password',
-  type: 'password' as const,
-  placeholder: 'Enter your password',
-}]
+const usernameField: AuthFormField = {
+  name: 'username',
+  type: 'text',
+  label: 'username',
+  placeholder: 'what is your questing name?',
+  required: true
+}
 
-const providers = [{
-  label: 'GitHub',
-  icon: 'i-simple-icons-github',
-  onClick: async () => {
-    const {error} = await supabase.auth.signInWithOAuth({
-      provider: 'github',
-      options: {
-        redirectTo: 'http://localhost:3000/confirm',
-      },
-    })
-    if (error) console.log(error)
+const defaultFields: AuthFormField[] = [
+  {
+    name: 'email',
+    type: 'email',
+    label: 'email',
+    placeholder: 'enter your email',
+    required: true
   },
-}]
+  {
+    name: 'password',
+    type: 'password',
+    label: 'password',
+    placeholder: 'enter your awesome password',
+    required: true
+  }]
+
+const fields = ref<AuthFormField[]>(defaultFields)
+
+function changeOption() {
+  sign.value = sign.value === 'up' ? 'in' : 'up'
+  if (sign.value == 'up') {
+    const arr: AuthFormField[] = []
+    arr.push(usernameField)
+    arr.push(defaultFields[0]!)
+    arr.push(defaultFields[1]!)
+
+    fields.value = arr
+  } else fields.value = defaultFields
+}
 
 const signIn = async (email: string, password: string) => {
   const {error} = await supabase.auth.signInWithPassword({
@@ -51,7 +62,7 @@ const signIn = async (email: string, password: string) => {
   if (error) displayError(error)
 }
 
-const signUp = async (email: string, password: string) => {
+const signUp = async (username: string, email: string, password: string) => {
   const {error} = await supabase.auth.signUp({
     email,
     password,
@@ -63,16 +74,23 @@ const signUp = async (email: string, password: string) => {
       icon: 'i-lucide-check-circle',
       color: 'success',
     })
-    await signIn(email, password)
+
+    signIn(email, password).then(async () => {
+      const user = await useSupabaseClient().auth.getUser()
+      const userID = user.data.user!.id
+
+      await supabase.from('profiles').insert({id: userID, username: username})
+    })
   }
 }
 
-async function onSubmit(payload: FormSubmitEvent<Schema>) {
+async function onSubmit(payload: FormSubmitEvent<any>) {
   const email = payload.data.email
   const password = payload.data.password
+  const username = payload.data.username
 
   if (sign.value === 'in') await signIn(email, password)
-  await signUp(email, password)
+  else await signUp(username, email, password)
 }
 
 const displayError = (error: AuthError) => {
@@ -92,7 +110,6 @@ const displayError = (error: AuthError) => {
           :title="sign === 'in' ? 'Login' : 'Sign up'"
           icon="i-lucide-user"
           :fields="fields"
-          :providers="providers"
           @submit="onSubmit"
           :submit="{label: 'start questing!'}"
       >
@@ -103,8 +120,7 @@ const displayError = (error: AuthError) => {
           <UButton
               variant="link"
               class="p-0"
-              @click="sign = sign === 'up' ? 'in' : 'up'"
-          >
+              @click="changeOption()">
             {{ sign === 'in' ? 'Sign up' : 'Sign in' }}
           </UButton>
           .

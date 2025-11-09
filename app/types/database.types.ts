@@ -93,37 +93,31 @@ export type Database = {
         Row: {
           avatar_url: string | null
           bio: string | null
-          college: string | null
           created_at: string | null
           id: string
           quests_completed: number | null
           quests_hosted: number | null
           quests_joined: number | null
-          trust_score: number | null
           username: string
         }
         Insert: {
           avatar_url?: string | null
           bio?: string | null
-          college?: string | null
           created_at?: string | null
           id: string
           quests_completed?: number | null
           quests_hosted?: number | null
           quests_joined?: number | null
-          trust_score?: number | null
           username: string
         }
         Update: {
           avatar_url?: string | null
           bio?: string | null
-          college?: string | null
           created_at?: string | null
           id?: string
           quests_completed?: number | null
           quests_hosted?: number | null
           quests_joined?: number | null
-          trust_score?: number | null
           username?: string
         }
         Relationships: []
@@ -169,39 +163,39 @@ export type Database = {
       }
       quests: {
         Row: {
-          college: string | null
           created_at: string | null
           description: string | null
+          end_time: string | null
           host_id: string
           id: string
           image_url: string | null
-          is_active: boolean | null
+          is_concluded: boolean | null
           location: string | null
-          time: string
+          start_time: string | null
           title: string
         }
         Insert: {
-          college?: string | null
           created_at?: string | null
           description?: string | null
+          end_time?: string | null
           host_id: string
           id?: string
           image_url?: string | null
-          is_active?: boolean | null
+          is_concluded?: boolean | null
           location?: string | null
-          time: string
+          start_time?: string | null
           title: string
         }
         Update: {
-          college?: string | null
           created_at?: string | null
           description?: string | null
+          end_time?: string | null
           host_id?: string
           id?: string
           image_url?: string | null
-          is_active?: boolean | null
+          is_concluded?: boolean | null
           location?: string | null
-          time?: string
+          start_time?: string | null
           title?: string
         }
         Relationships: [

@@ -23,9 +23,6 @@ importers:
       '@nuxtjs/supabase':
         specifier: 2.0.1
         version: 2.0.1
-      '@supabase/supabase-js':
-        specifier: ^2.80.0
-        version: 2.80.0
       gsap:
         specifier: ^3.13.0
         version: 3.13.0
@@ -41,6 +38,9 @@ importers:
       vue-router:
         specifier: ^4.6.3
         version: 4.6.3(vue@3.5.24(typescript@5.9.3))
+      zod:
+        specifier: ^4.1.12
+        version: 4.1.12
     devDependencies:
       supabase:
         specifier: ^2.54.11
