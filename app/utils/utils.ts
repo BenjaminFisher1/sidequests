@@ -1,11 +1,22 @@
 export async function getUserDataFromID(id: string) {
-    const {data} = await useSupabaseClient().from("profiles").select().eq("id", id).single()
-    return data
+    // const {data} = await useSupabaseClient().from("profiles").select().eq("id", id).single()
+    // return data
+    //
+    return await fetchRows("profiles", "id", id)
 }
 
 export async function getUsernameFromID(id: string) {
    const data = await getUserDataFromID(id)
     return data?.username
+}
+
+export async function fetchRows(table: string, col: string, equals: string) {
+    const {data: data} = await useAsyncData(async () => {
+        const {data} = await useSupabaseClient().from(table).select().eq(col, equals)
+        return data
+    })
+
+    return data.value
 }
 
 export function toastError(msg: string) {

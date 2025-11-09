@@ -7,7 +7,7 @@ const schema = z.object({
   description: z.string('describe thy quest!').min(8, 'Must be at least 8 characters'),
   image: z.file().optional(),
   startDate: z.iso.datetime({local: true, error: 'enter a start date!'}),
-  endDate: z.iso.datetime({ local: true, error: 'enter an end date!'}),
+  endDate: z.iso.datetime({local: true, error: 'enter an end date!'}),
   location: z.string('provide a location for thy quest!'),
 })
 
@@ -32,9 +32,13 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
   const imageFile = event.data.image
   let imageStoragePath
   if (imageFile) {
-    const {data, error} = await client.storage.from('images').upload(`public/${imageFile?.name}`, imageFile)
+    const {data: image, error: error} = await useAsyncData('image', async () => {
+      const {data, error} = await client.storage.from('images').upload(`public/${imageFile?.name}`, imageFile)
+      return data, error
+    })
 
-    if(error) toastError(error.message)
+
+    if (error) toastError(error.message)
     else
       imageStoragePath = data?.fullPath
   }
@@ -51,7 +55,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
     location: formData.location
   })
 
-  if(error) toastError(error.message)
+  if (error) toastError(error.message)
   toast.add({title: 'INCREDIBLE!', description: 'HUZZAH! ADVENTURE AWAITS!', color: 'success'})
   navigateTo('/home')
 }

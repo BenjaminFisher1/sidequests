@@ -1,9 +1,11 @@
 <script setup lang="ts">
 const slug = useRoute().params.slug!
-const client = useSupabaseClient()
-const {data} = await client.from("profiles").select().eq("username", slug).single()
+// const client = useSupabaseClient()
+// const {data} = await client.from("profiles").select().eq("username", slug).single()
 
-const allQuests = await client.from("quests").select().eq("host_id", data!.id)
+const data = await fetchRows("profiles", "username", slug as string)
+// const allQuests = await client.from("quests").select().eq("host_id", data!.id)
+const allQuests = await fetchRows("quests", "host_id", data!.id)
 </script>
 
 <template>

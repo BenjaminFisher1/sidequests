@@ -6,7 +6,7 @@
   <UApp>
     <UMain>
       <NuxtLayout>
-        <NuxtPage class="text-amber-50 overflow-x-hidden"/>
+        <NuxtPage/>
       </NuxtLayout>
     </UMain>
   </UApp>

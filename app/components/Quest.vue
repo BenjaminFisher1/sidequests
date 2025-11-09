@@ -4,7 +4,7 @@ import {gsap} from "gsap";
 import JoinQuest from "~/components/JoinQuest.vue";
 
 const props = defineProps<{
-  data: Tables<"quests">
+  data: any
 }>()
 
 const questMaster = ref()
@@ -14,7 +14,9 @@ const comment = ref('')
 onMounted(async () => {
   await nextTick()
   // Wait for the next DOM update cycle
+  console.log("data", await props.data.value)
   const username = await getUsernameFromID(props.data.host_id)
+  console.log("user", username)
   questMaster.value = username
   questMasterLink.value = `/quester/${username}`
 
@@ -52,8 +54,8 @@ function whenIsQuest(start: string, end: string) {
     return "happening Right Now!"
 }
 
-const comments = await useSupabaseClient().from("comments").select().eq("quest_id", props.data.id)
-console.log(comments.data)
+const comments = await fetchRows("comments", "quest_id", props.data.id)
+console.log(comments)
 </script>
 
 <template>
@@ -86,7 +88,7 @@ console.log(comments.data)
     <div class="rounded-b-3xl p-4 bg-aqua">
       <p class="text-sm">comments</p>
 
-      <Comment v-for="comment in comments.data" :data="comment"></Comment>
+      <Comment v-for="comment in comments" :data="comment"></Comment>
 
       <div class="flex">
         <UTextarea class="mt-3 rounded-3xl w-full" v-model="comment" placeholder="leave a comment!" />

@@ -10,7 +10,8 @@ const huzzahs = ref(0)
 onMounted(async () => {
   await nextTick()
 
-  const {data} = await useSupabaseClient().from("huzzahs").select().eq("quest_id", props.questID)
+  // const {data} = await useSupabaseClient().from("huzzahs").select().eq("quest_id", props.questID)
+  const data = await fetchRows("huzzahs", "quest_id", props.questID)
   const huzzLen = data?.length || 0
   huzzahs.value = huzzLen
 
