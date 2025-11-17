@@ -5,22 +5,17 @@ export default defineNuxtConfig({
     compatibilityDate: '2025-07-15',
     devtools: {enabled: true},
     modules: [
-      '@nuxtjs/supabase',
-      '@nuxt/image',
-      '@nuxt/icon',
-      '@nuxt/ui',
+        '@nuxt/image',
+        '@nuxt/icon',
+        '@nuxt/ui',
+        'nuxt-auth-utils',
+        '@nuxthub/core',
     ],
 
-    css: ['~/assets/css/main.css'],
+    runtimeConfig: {
+        // private values only available on server
+        databaseUrl: process.env.DATABASE_URL,
+    },
 
-    supabase: {
-        types: '~/types/database.types.ts',
-        redirectOptions: {
-            login: '/login',
-            callback: '/confirm',
-            include: undefined,
-            exclude: ['/'],
-            saveRedirectToCookie: false,
-        }
-    }
+    css: ['~/assets/css/main.css'],
 })

@@ -1,7 +1,5 @@
 <script setup lang="ts">
 import { gsap } from "gsap";
-import type { Database, Tables, Enums } from "~/types/database.types";
-
 
 onMounted(async () => {
   // Wait for the next DOM update cycle
@@ -11,9 +9,9 @@ onMounted(async () => {
       .from("#logo", {scale: 0, duration: 2, rotationX: 180, rotationY: 360 })
 })
 
-const exampleQuests: Tables<"quests">[] = [{title: "come to my birthday party!", description: "hello! i'm having a super cool public birthday at the park! you should come :)"  }]
+// const exampleQuests: Tables<"quests">[] = [{title: "come to my birthday party!", description: "hello! i'm having a super cool public birthday at the park! you should come :)"  }]
 
-const route = useSupabaseSession().value ? '/home' : '/index'
+// const route = useSupabaseSession().value ? '/home' : '/index'
 </script>
 
 <template>
@@ -22,7 +20,7 @@ const route = useSupabaseSession().value ? '/home' : '/index'
     <img id="logo" class="opacity-0" src="~/assets/sidequests.gif" alt="sidequests logo">
     <p class="font-extrabold text-2xl mt-4 ">a new magical adventure in the domain of your very own community! </p>
 
-    <NuxtLink :to="route" class="my-6">
+    <NuxtLink to="/home" class="my-6">
       <img src="~/assets/startquesting.gif" alt="start questing!" />
     </NuxtLink>
 

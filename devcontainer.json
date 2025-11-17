@@ -1,0 +1,10 @@
+{
+  "name": "sidequests",
+  // "service": "the-name-of-the-service-you-want-to-work-with-in-vscode",
+  "workspaceFolder": "/app",
+  
+  "extensions": ["nuxtr.nuxtr-vscode", "jasew.vscode-helix-emulation"],
+  "remoteUser": "vscode",
+
+  "forwardPorts": [3000, 3306]
+}

@@ -1,27 +1,25 @@
 <script setup lang="ts">
-import type {Tables} from "~/types/database.types";
 import {gsap} from "gsap";
 import JoinQuest from "~/components/JoinQuest.vue";
 
 const props = defineProps<{
-  data: Tables<"quests">
+  data: Quest
 }>()
 
-const questMaster = ref()
-const questMasterLink = ref()
+const questHoster = ref()
+const questHosterLink = ref()
 const comment = ref('')
 
 onMounted(async () => {
   await nextTick()
   // Wait for the next DOM update cycle
-  const username = await getUsernameFromID(props.data.host_id)
-  questMaster.value = username
-  questMasterLink.value = `/quester/${username}`
+  const username = (await getProfileFromID(props.data.hostId)).username
+  questHoster.value = username
+  questHosterLink.value = `/quester/${username}`
 
-
-  gsap.timeline()
-      .set(".questPost", {opacity: 1})
-      .from(".questPost", {xPercent: -200, duration: 0.5, ease: "ease.inOut"})
+  // gsap.timeline()
+  //     .set(".questPost", {opacity: 1})
+  //     .from(".questPost", {xPercent: -200, duration: 0.5, ease: "ease.inOut"})
 
 })
 
@@ -51,15 +49,12 @@ function whenIsQuest(start: string, end: string) {
   else
     return "happening Right Now!"
 }
-
-const comments = await useSupabaseClient().from("comments").select().eq("quest_id", props.data.id)
-console.log(comments.data)
 </script>
 
 <template>
   <div class="questPost opacity-80">
     <div class="rounded-t-3xl bg-quest p-4 flex flex-col font-mono text-amber-50">
-      <Quester :id="data.host_id"/>
+      <Quester :id="data.hostId"/>
 
       <i class="text-2xl font-extrabold mt-2">{{ data.title }}</i>
       <p class="text-sm">{{ data.description }}</p>
@@ -70,23 +65,23 @@ console.log(comments.data)
           <p>{{ data.location }}</p>
         </div>
 
-        <p class="text-sm text-quest font-bold">{{ whenIsQuest(data.start_time!, data.end_time!) }}</p>
-        <p>starts: {{ formatDate(data.start_time!) }}</p>
-        <p>ends: {{ formatDate(data.end_time!) }}</p>
+        <p class="text-sm text-quest font-bold">{{ whenIsQuest(data.startTime, data.endTime) }}</p>
+        <p>starts: {{ formatDate(data.startTime) }}</p>
+        <p>ends: {{ formatDate(data.endTime) }}</p>
       </div>
 
       <div class="grid grid-cols-3">
-        <Huzzah class="justify-start" :questID="data.id"/>
+<!--        <Huzzah class="justify-start" :questID="data.id"/>-->
 
         <div></div>
 
-        <JoinQuest :questID="data.id"></JoinQuest>
+<!--        <JoinQuest :questID="data.id"></JoinQuest>-->
       </div>
     </div>
     <div class="rounded-b-3xl p-4 bg-aqua">
       <p class="text-sm">comments</p>
 
-      <Comment v-for="comment in comments.data" :data="comment"></Comment>
+<!--      <Comment v-for="comment in comments.data" :data="comment"></Comment>-->
 
       <div class="flex">
         <UTextarea class="mt-3 rounded-3xl w-full" v-model="comment" placeholder="leave a comment!" />
@@ -97,7 +92,4 @@ console.log(comments.data)
  </template>
 
 <style scoped>
-.questPost {
-  opacity: 0;
-}
 </style>

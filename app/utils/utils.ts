@@ -1,11 +1,10 @@
-export async function getUserDataFromID(id: string) {
-    const {data} = await useSupabaseClient().from("profiles").select().eq("id", id).single()
-    return data
-}
+export async function getProfileFromID(id: string) {
+    const data = await $fetch('/api/profiles/id', {
+        method: 'post',
+        body: {id: id},
+    })
 
-export async function getUsernameFromID(id: string) {
-   const data = await getUserDataFromID(id)
-    return data?.username
+    return data[0] as Profile
 }
 
 export function toastError(msg: string) {
@@ -17,13 +16,8 @@ export function toastError(msg: string) {
     })
 }
 
-export async function getCurrentUserID() {
-    const user = await useSupabaseClient().auth.getUser()
-    return user.data.user!.id
-}
-
 export function formatDate(date: string) {
-    const d = new Date(date);
+    const d = new Date(date)
     const months = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'];
     const days = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
     const month = months[d.getMonth()];

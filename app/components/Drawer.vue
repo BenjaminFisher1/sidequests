@@ -5,8 +5,9 @@ interface Button {
   alt: string
 }
 
-const username = await getUsernameFromID(await getCurrentUserID())
-const link = '/' + username
+// const username = await getUsernameFromID(await getCurrentUserID())
+// const link = '/' + username
+const link = '/'
 
 const buttons: Button[] = [
   {to: '/home', src: '/home_icon.gif', alt: 'home icon'},

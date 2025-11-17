@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import type {Tables} from "~/types/database.types";
+
+import {getProfileFromID} from "~/utils/utils";
 
 const props = defineProps<{
   id: string
@@ -14,13 +15,15 @@ const color = props.color || "bg-violet"
 onMounted(async () => {
   await nextTick()
   // Wait for the next DOM update cycle
-  const username = await getUsernameFromID(props.id)
+
+  const profile = await getProfileFromID(props.id)
+  const username = profile.username
+
   quester.value = username
   questerLink.value = `/quester/${username}`
 
   //set magic!
-  const userData = await getUserDataFromID(props.id)
-  magic.value = (userData?.quests_hosted + userData?.quests_completed) || 0
+  magic.value = (profile.questsHosted + profile.questsCompleted)
 })
 </script>
 

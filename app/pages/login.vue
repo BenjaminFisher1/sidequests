@@ -1,17 +1,15 @@
 <script setup lang="ts">
-//code template from https://github.com/nuxt-modules/supabase/blob/main/demo/pages/login.vue
 import type {FormSubmitEvent} from "#ui/types";
 import type {AuthFormField} from '@nuxt/ui'
+const { loggedIn, user, session, fetch, clear, openInPopup } = useUserSession()
 
-const supabase = useSupabaseClient()
-const user = useSupabaseUser()
 const toast = useToast()
 
 const sign = ref<'in' | 'up'>('in')
 
 watchEffect(() => {
-  if (user.value) {
-    return navigateTo('/')
+  if (loggedIn) {
+    return navigateTo('/home')
   }
 })
 
@@ -63,6 +61,9 @@ const signIn = async (email: string, password: string) => {
 }
 
 const signUp = async (username: string, email: string, password: string) => {
+  setUserSession()
+
+
   const {error} = await supabase.auth.signUp({
     email,
     password,
