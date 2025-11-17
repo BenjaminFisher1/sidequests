@@ -3,13 +3,19 @@ import {useRuntimeConfig} from "nuxt/app";
 
 export default defineNuxtConfig({
     compatibilityDate: '2025-07-15',
-    devtools: {enabled: true},
+    devtools: {
+      enabled: true,
+
+      timeline: {
+        enabled: true,
+      },
+    },
     modules: [
-        '@nuxt/image',
-        '@nuxt/icon',
-        '@nuxt/ui',
-        'nuxt-auth-utils',
-        '@nuxthub/core',
+      '@nuxt/image',
+      '@nuxt/icon',
+      '@nuxt/ui',
+      'nuxt-auth-utils',
+      '@nuxt/eslint',
     ],
 
     runtimeConfig: {

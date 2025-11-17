@@ -11,6 +11,8 @@ export const profiles = pgTable("profiles", {
 	questsCompleted: integer("quests_completed").default(0).notNull(),
 	questsJoined: integer("quests_joined").default(0).notNull(),
 	createdAt: timestamp("created_at", { mode: 'string' }).defaultNow().notNull(),
+	password: text().notNull(),
+	salt: text().notNull(),
 }, (table) => [
 	uniqueIndex("profiles_pk").using("btree", table.id.asc().nullsLast().op("uuid_ops")),
 	uniqueIndex("profiles_username_pk").using("btree", table.username.asc().nullsLast().op("text_ops")),

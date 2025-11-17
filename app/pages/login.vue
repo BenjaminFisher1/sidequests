@@ -1,27 +1,27 @@
 <script setup lang="ts">
 import type {FormSubmitEvent} from "#ui/types";
 import type {AuthFormField} from '@nuxt/ui'
-const { loggedIn, user, session, fetch, clear, openInPopup } = useUserSession()
+
+const {loggedIn, user, session, fetch, clear, openInPopup} = useUserSession()
 
 const toast = useToast()
 
 const sign = ref<'in' | 'up'>('in')
 
 watchEffect(() => {
-  if (loggedIn) {
+  if (loggedIn.value) {
     return navigateTo('/home')
   }
 })
 
-const usernameField: AuthFormField = {
-  name: 'username',
-  type: 'text',
-  label: 'username',
-  placeholder: 'what is your questing name?',
-  required: true
-}
-
-const defaultFields: AuthFormField[] = [
+const authFields: AuthFormField[] = [
+  {
+    name: 'username',
+    type: 'text',
+    label: 'username',
+    placeholder: 'what is your questing name?',
+    required: true
+  },
   {
     name: 'email',
     type: 'email',
@@ -37,49 +37,52 @@ const defaultFields: AuthFormField[] = [
     required: true
   }]
 
-const fields = ref<AuthFormField[]>(defaultFields)
+const fields = ref<AuthFormField[]>(authFields)
 
-function changeOption() {
-  sign.value = sign.value === 'up' ? 'in' : 'up'
-  if (sign.value == 'up') {
-    const arr: AuthFormField[] = []
-    arr.push(usernameField)
-    arr.push(defaultFields[0]!)
-    arr.push(defaultFields[1]!)
+const signIn = async (username: string, email: string, password: string) => {
 
-    fields.value = arr
-  } else fields.value = defaultFields
-}
+  try {
+    const profile = (await getProfileFromUsername(username))[0] as Profile
 
-const signIn = async (email: string, password: string) => {
-  const {error} = await supabase.auth.signInWithPassword({
-    email,
-    password,
-  })
+    if (await verifyUserCredential(email, password, profile.salt!, profile.password!)) {
+      await $fetch('/api/auth/login', {
+        method: 'post',
+        body: {
+          username: username,
+          password: profile.password!,
+        },
+      })
+    }
 
-  if (error) displayError(error)
+    navigateTo('/home')
+  } catch (error) {
+    displayError(error)
+  }
 }
 
 const signUp = async (username: string, email: string, password: string) => {
-  setUserSession()
+  try {
+    const cred = await generateUserCredential(email, password)
+    console.log(cred)
 
+    const profile = await $fetch('/api/auth/register', {
+      method: 'post',
+      body: {
+        username: username,
+        password: cred.hash,
+        salt: cred.salt
+      },
+    })
 
-  const {error} = await supabase.auth.signUp({
-    email,
-    password,
-  })
-  if (error) displayError(error)
-  else {
     toast.add({
       title: 'Sign up successful',
       icon: 'i-lucide-check-circle',
       color: 'success',
     })
 
-    signIn(email, password).then(async () => {
-      const userID = await getCurrentUserID()
-      await supabase.from('profiles').insert({id: userID, username: username})
-    })
+    await signIn(username, email, password)
+  } catch (error) {
+    displayError(error)
   }
 }
 
@@ -88,7 +91,7 @@ async function onSubmit(payload: FormSubmitEvent<any>) {
   const password = payload.data.password
   const username = payload.data.username
 
-  if (sign.value === 'in') await signIn(email, password)
+  if (sign.value === 'in') await signIn(username, email, password)
   else await signUp(username, email, password)
 }
 
@@ -119,7 +122,7 @@ const displayError = (error: AuthError) => {
           <UButton
               variant="link"
               class="p-0"
-              @click="changeOption()">
+              @click="sign = sign === 'up' ? 'in' : 'up'">
             {{ sign === 'in' ? 'Sign up' : 'Sign in' }}
           </UButton>
           .

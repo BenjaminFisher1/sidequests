@@ -1,75 +1,44 @@
-# Nuxt Minimal Starter
+# hello traveller! welcome to **_sidequests!!!_**
 
-Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+sidequests is a local community-driven platform that encourages users to help one another out through the making and embarking of quests! 
+users can redeem quests from other users to gain magic!
 
-## Setup
+when a quest is completed, users can make a post about their quest together, and it will appear in the community tab!
 
-Make sure to install dependencies:
+## features (so far)
+* Uses a PostgreSQL instance inside of docker, meaning it is fully self-contained and ready to deploy!
+* Drizzle ORM for type-safe database queries
+* Nuxt-auth-utils for user authentication
 
-```bash
-# npm
-npm install
+## to-dos!
+* edit user profile
+* populate dev environment database with testing data
+* join quest feature
+* location map for quests
+* quest concluding functionality (giving people magic and the credit)
+* community posts from quests
+* make different types of quests
+* figure out how much magic each quest is worth
+* user notifications (in app and with PWA)
+* research how to make PWA version
+* research database safety protocols!
+* add passkey support
+* graphic design needed for icons and UI
+* figure out how to get email server running on docker
+* encrypted group chats!
 
-# pnpm
-pnpm install
-
-# yarn
-yarn install
-
-# bun
-bun install
+```              
+              *                 get questing!!!
+             / \
+            /___\
+           ( o o )            * *
+           )  L  (           /   * *
+   ________()(-)()________  /     * * *
+ E\| _____ )()()() ______ |/B     * * *
+   |/      ()()()(       \|      * * * *
+           | )() |
+           /     \
+          / *  *  \
+         /   *  *  \
+        / *_  *  _  \   jiri
 ```
-
-## Development Server
-
-Start the development server on `http://localhost:3000`:
-
-```bash
-# npm
-npm run dev
-
-# pnpm
-pnpm dev
-
-# yarn
-yarn dev
-
-# bun
-bun run dev
-```
-
-## Production
-
-Build the application for production:
-
-```bash
-# npm
-npm run build
-
-# pnpm
-pnpm build
-
-# yarn
-yarn build
-
-# bun
-bun run build
-```
-
-Locally preview production build:
-
-```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
