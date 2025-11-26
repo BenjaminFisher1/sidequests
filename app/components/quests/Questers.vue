@@ -30,31 +30,34 @@ const userJoined = await $fetch("/api/questers/joined", {
 questJoined.value = userJoined;
 
 async function joinQuest() {
-  questJoined.value = !questJoined.value;
-
   //if not liked, add the like
-  if (questJoined.value) {
+  if (!questJoined.value) {
     await $fetch("/api/quests/join", {
       method: "post",
       body: { questId: props.questId },
-    });
+    })
+      .then(async () => {
+        questJoined.value = !questJoined.value;
+        await new Audio("/huzzah.mp3").play();
 
-    await new Audio("/huzzah.mp3").play();
+        useToast().add({
+          title: "you have chosen to embark on this quest! huzzah!",
+          icon: "pixel:people-carry-solid",
+          color: "success",
+        });
 
-    useToast().add({
-      title: "you have chosen to embark on this quest! huzzah!",
-      // description: msg,
-      icon: "pixel:people-carry-solid",
-      color: "success",
-    });
-
-    numQuesters.value++;
+        numQuesters.value++;
+      })
+      .catch((error) => {
+        toastError(error.message);
+      });
   } else {
     await $fetch("/api/quests/leave", {
       method: "post",
       body: { questId: props.questId },
     });
 
+    questJoined.value = !questJoined.value;
     numQuesters.value--;
   }
 

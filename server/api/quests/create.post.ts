@@ -20,7 +20,7 @@ export default defineEventHandler<{ body: { data: Object } }>(async (event) => {
 
   //if data parsing unsuccessful
   if (result.error)
-    throw createError({ statusCode: 400, message: result.error.message });
+    throw createError({ statusCode: 400, statusMessage: result.error.message });
 
   return db
     .insert(quests)

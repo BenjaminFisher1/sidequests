@@ -13,7 +13,10 @@ export default defineWebAuthnAuthenticateEventHandler({
     await useStorage().removeItem(`attempt:${attemptId}`);
 
     if (!challenge)
-      throw createError({ statusCode: 400, message: "Challenge expired" });
+      throw createError({
+        statusCode: 400,
+        statusMessage: "Challenge expired",
+      });
 
     return challenge;
   },

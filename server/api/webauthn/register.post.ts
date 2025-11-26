@@ -14,7 +14,7 @@ export default defineWebAuthnRegisterEventHandler({
     if (!challenge) {
       throw createError({
         statusCode: 400,
-        message: "Challenge not found or expired",
+        statusMessage: "Challenge not found or expired",
       });
     }
     await useStorage().removeItem(`auth:challenge:${attemptId}`);
@@ -39,7 +39,7 @@ export default defineWebAuthnRegisterEventHandler({
         .catch(() => {
           throw createError({
             statusCode: 400,
-            message: "User already exists",
+            statusMessage: "User already exists",
           });
         })
     )[0] as Profile;
