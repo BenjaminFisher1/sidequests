@@ -16,7 +16,32 @@ when a quest is completed, users can make a post about their quest together, and
   - customize your avatar or account - name flair (?)
   - game associated (?)
 
-## to-dos!
+---
+
+# development
+
+### database setup
+1. Make a `.env` file, using `.env.example` as a template
+
+2. To run the PostgreSQL instance in Docker, simply run `docker compose up`
+
+3. Once that is running, run `pnpm run db:init`, the command is found in the `package.json`. 
+This just sets up the schemas in the database for you (given everything else is working). 
+For the time being, you will need to make your own testing data.
+
+4. You can run `pnpm run studio` to run [**drizzle-kit studio**](https://orm.drizzle.team/docs/drizzle-kit-studio), which is a great way to interact with the database graphically!
+   
+
+After you have done all of this, run `pnpm run dev` to start developing!
+
+Make a new account with a passkey and start populating your database with testing data!
+- If you don't want to make your test data manually, you can check out Drizzle's [seeding](https://orm.drizzle.team/docs/seed-overview) functionality!
+
+_**you should be off to the races! happy developing!**_
+
+---
+
+# to-dos!
 ### quests
 - join quest confirmation pop-up
 - leave quest confirmation pop-up
@@ -34,20 +59,25 @@ when a quest is completed, users can make a post about their quest together, and
 ### profiles
 - show who you've done quests with in the past
 - show friends (ranked by magic?)
+- edit your profile
 
 ### adventures (public quests)
 - show how many people are going on this adventure
 - on map, show number of people going on adventure
 
+### ui
+- make swipable UI
+- add buttons to make navigation easy!
+
 ### user stuff
-- add passkey support
+~~- add passkey support~~
 - edit user profile
 - delete comments, posts, etc.
 - add friends list!
 - encrypted messaging between friends
 
 ### dev stuff
-- populate dev environment database with testing data
+~~- populate dev environment database with testing data~~
 - research how to prevent SQL injection!
 - figure out image upload!!!
 - user notifications (in app and with PWA)
