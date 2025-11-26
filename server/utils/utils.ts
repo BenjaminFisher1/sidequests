@@ -1,5 +1,7 @@
-import {profiles} from "~~/server/database/migrations/schema";
+import { profiles } from "~~/server/database/migrations/schema";
 
-export function getProfileFromUsername(username: string) {
-    return db.select().from(profiles).where(eq(profiles.username, username)).limit(1)
+export async function getProfileFromUsername(username: string) {
+  return (await db.query.profiles.findFirst({
+    where: eq(profiles.username, username),
+  })) as Profile;
 }

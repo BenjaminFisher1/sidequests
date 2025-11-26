@@ -1,27 +1,30 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
-import {useRuntimeConfig} from "nuxt/app";
 
 export default defineNuxtConfig({
-    compatibilityDate: '2025-07-15',
-    devtools: {
+  compatibilityDate: "2025-07-15",
+  devtools: {
+    enabled: true,
+
+    timeline: {
       enabled: true,
-
-      timeline: {
-        enabled: true,
-      },
     },
-    modules: [
-      '@nuxt/image',
-      '@nuxt/icon',
-      '@nuxt/ui',
-      'nuxt-auth-utils',
-      '@nuxt/eslint',
-    ],
+  },
+  modules: [
+    "@nuxt/image",
+    "@nuxt/icon",
+    "@nuxt/ui",
+    "nuxt-auth-utils",
+    "@nuxt/eslint",
+  ],
 
-    runtimeConfig: {
-        // private values only available on server
-        databaseUrl: process.env.DATABASE_URL,
-    },
+  auth: {
+    webAuthn: true,
+  },
 
-    css: ['~/assets/css/main.css'],
-})
+  runtimeConfig: {
+    // private values only available on server
+    databaseUrl: process.env.DATABASE_URL,
+  },
+
+  css: ["~/assets/css/main.css"],
+});

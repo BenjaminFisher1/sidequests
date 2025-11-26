@@ -1,4 +1,4 @@
-import { pgTable, uniqueIndex, uuid, varchar, text, integer, timestamp, check, boolean } from "drizzle-orm/pg-core"
+import { pgTable, uniqueIndex, uuid, varchar, text, integer, timestamp, check, boolean, foreignKey, primaryKey } from "drizzle-orm/pg-core"
 import { sql } from "drizzle-orm"
 
 
@@ -11,10 +11,7 @@ export const profiles = pgTable("profiles", {
 	questsCompleted: integer("quests_completed").default(0).notNull(),
 	questsJoined: integer("quests_joined").default(0).notNull(),
 	createdAt: timestamp("created_at", { mode: 'string' }).defaultNow().notNull(),
-	password: text().notNull(),
-	salt: text().notNull(),
 }, (table) => [
-	uniqueIndex("profiles_pk").using("btree", table.id.asc().nullsLast().op("uuid_ops")),
 	uniqueIndex("profiles_username_pk").using("btree", table.username.asc().nullsLast().op("text_ops")),
 ]);
 
@@ -39,3 +36,19 @@ export const questers = pgTable("questers", {
 	wasAbsent: boolean("was_absent").default(false).notNull(),
 	joinedAt: timestamp("joined_at", { mode: 'string' }).defaultNow().notNull(),
 });
+
+export const credentials = pgTable("credentials", {
+	userId: uuid("user_id").notNull(),
+	id: text().notNull(),
+	publicKey: text("public_key").notNull(),
+	counter: integer().notNull(),
+	backedUp: boolean("backed_up").notNull(),
+	transports: text().array().notNull(),
+}, (table) => [
+	foreignKey({
+			columns: [table.userId],
+			foreignColumns: [profiles.id],
+			name: "credentials_profiles_id_fk"
+		}).onDelete("cascade"),
+	primaryKey({ columns: [table.userId, table.id], name: "credentials_pk"}),
+]);
