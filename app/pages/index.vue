@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import { gsap } from "gsap";
 
+definePageMeta({
+  layout: false,
+});
+
 onMounted(async () => {
   // Wait for the next DOM update cycle
   await nextTick();
@@ -10,7 +14,7 @@ onMounted(async () => {
     .from("#logo", { scale: 0, duration: 2, rotationX: 180, rotationY: 360 });
 });
 
-// const exampleQuests: Tables<"quests">[] = [{title: "come to my birthday party!", description: "hello! i'm having a super cool public birthday at the park! you should come :)"  }]
+// const exampleQuests: Tables<"quest">[] = [{title: "come to my birthday party!", description: "hello! i'm having a super cool public birthday at the park! you should come :)"  }]
 
 const { loggedIn } = useUserSession();
 const route = loggedIn.value ? "/home" : "/login";

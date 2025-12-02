@@ -14,7 +14,7 @@ export default defineNuxtConfig({
     "@nuxt/icon",
     "@nuxt/ui",
     "nuxt-auth-utils",
-    "@nuxt/eslint",
+    "@nuxtjs/leaflet",
   ],
 
   auth: {

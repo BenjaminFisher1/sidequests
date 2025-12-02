@@ -12,7 +12,3 @@ const config = useRuntimeConfig();
 export const db = drizzle(config.databaseUrl, {
   schema: { ...schema, ...relations },
 });
-
-export type Quest = typeof schema.quests.$inferSelect;
-export type Profile = typeof schema.profiles.$inferSelect;
-export type Quester = typeof schema.questers.$inferSelect;

@@ -5,14 +5,21 @@ definePageMeta({
 
 const user = useRoute().params.user;
 
-const profile = await getProfileFromUsername(user!);
+const { data: profileData } = await useFetch("/api/profiles/username", {
+  method: "post",
+  body: { user: user },
+});
 
-console.log(profile);
+const profile = profileData.value as Profile;
 
 const { data: questsHosted } = await useFetch("/api/profiles/quests", {
   method: "post",
   body: { id: profile.id },
 });
+
+//if user owns account
+const edit = ref(false);
+if (user == profile.username) edit.value = true;
 </script>
 
 <template>
@@ -38,6 +45,7 @@ const { data: questsHosted } = await useFetch("/api/profiles/quests", {
 
     <div
       class="border-l-4 border-amber-100 bg-green-800 opacity-70 rounded-3xl p-4 text-2xl my-6"
+      v-if="profile.bio"
     >
       {{ profile.bio }}
     </div>
@@ -47,11 +55,8 @@ const { data: questsHosted } = await useFetch("/api/profiles/quests", {
       <p v-else class="questText text-red-400">no quests hosted yet :(</p>
     </div>
 
-    <div v-if="questsHosted.length > 0">
-      <LazyQuestsQuest
-        v-for="quest in questsHosted"
-        :data="quest"
-      ></LazyQuestsQuest>
+    <div v-if="questsHosted.length > 0" class="font-mono">
+      <LazyQuest v-for="quest in questsHosted" :data="quest" />
     </div>
   </div>
 </template>

@@ -2,6 +2,10 @@
 import type { FormSubmitEvent } from "#ui/types";
 import type { AuthFormField } from "@nuxt/ui";
 
+definePageMeta({
+  layout: false,
+});
+
 const { loggedIn, user, session, clear, openInPopup } = useUserSession();
 const { register, authenticate } = useWebAuthn({
   registerEndpoint: "/api/webauthn/register", // Default

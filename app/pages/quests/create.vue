@@ -2,18 +2,11 @@
 import * as z from "zod";
 import type { FormSubmitEvent } from "@nuxt/ui";
 
-const schema = z.object({
-  title: z.string("label thy quest!").min(8, "Must be at least 8 characters"),
-  description: z
-    .string("describe thy quest!")
-    .min(8, "Must be at least 8 characters"),
-  image: z.file().optional(),
-  startTime: z.iso.datetime({ local: true, error: "enter a start date!" }),
-  endTime: z.iso.datetime({ local: true, error: "enter an end date!" }),
-  location: z.string("provide a location for thy quest!"),
+definePageMeta({
+  middleware: "auth",
 });
 
-type Schema = z.output<typeof schema>;
+type Schema = z.output<typeof FormSchema>;
 
 const state = reactive<Partial<Schema>>({
   title: undefined,
@@ -27,20 +20,6 @@ const state = reactive<Partial<Schema>>({
 const toast = useToast();
 
 async function onSubmit(event: FormSubmitEvent<Schema>) {
-  const formData = event.data;
-  console.log(event.data);
-
-  // const imageFile = event.data.image;
-  // let imageStoragePath;
-  // if (imageFile) {
-  //   const { data, error } = await client.storage
-  //     .from("images")
-  //     .upload(`public/${imageFile?.name}`, imageFile);
-  //
-  //   if (error) toastError(error.message);
-  //   else imageStoragePath = data?.fullPath;
-  // }
-
   await $fetch("/api/quests/create", {
     method: "post",
     body: { data: event.data },
@@ -65,7 +44,12 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
     class="font-scroll text-black h-screen w-screen flex flex-col p-6"
   >
     <p class="text-5xl">make a quest</p>
-    <UForm :schema="schema" :state="state" class="space-y-4" @submit="onSubmit">
+    <UForm
+      :schema="FormSchema"
+      :state="state"
+      class="space-y-4"
+      @submit="onSubmit"
+    >
       <UFormField label="title" name="title" class="text-3xl">
         <UInput v-model="state.title" placeholder="name thy quest!" />
       </UFormField>

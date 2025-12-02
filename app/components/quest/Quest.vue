@@ -1,11 +1,10 @@
 <script setup lang="ts">
-import Questers from "~/components/quests/Questers.vue";
+import Questers from "~/components/quest/Questers.vue";
+import Comments from "~/components/quest/Comments.vue";
 
 const props = defineProps<{
   data: Quest;
 }>();
-
-const comment = ref("");
 
 onMounted(async () => {
   await nextTick();
@@ -53,7 +52,7 @@ function whenIsQuest(start: string, end: string) {
 
       <div class="bg-light-purple rounded-3xl p-4 my-4">
         <div class="flex items-center">
-          <UIcon name="material-symbols:map-pin-heart-rounded"></UIcon>
+          <UIcon name="material-symbols:map-pin-heart-rounded" class="mr-1" />
           <p>{{ data.location }}</p>
         </div>
 
@@ -65,20 +64,25 @@ function whenIsQuest(start: string, end: string) {
       </div>
 
       <Questers :questId="data.id" />
-    </div>
-    <div class="rounded-b-3xl p-4 bg-aqua">
-      <p class="text-sm">comments</p>
 
-      <!--      <Comment v-for="comment in comments.data" :data="comment"></Comment>-->
+      <div class="flex gap-2">
+        <UButton
+          icon="material-symbols:share"
+          color="secondary"
+          size="md"
+          variant="subtle"
+        />
 
-      <div class="flex">
-        <UTextarea
-          class="mt-3 rounded-3xl w-full"
-          v-model="comment"
-          placeholder="leave a comment!"
+        <UButton
+          icon="material-symbols:send-rounded"
+          color="secondary"
+          size="md"
+          variant="subtle"
         />
       </div>
     </div>
+
+    <Comments :questId="props.data.id" />
   </div>
 </template>
 

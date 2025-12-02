@@ -1,18 +1,6 @@
 name: sidequests
 
 services:
-  #  mariadb:
-  #    image: mariadb:latest
-  #    restart: always
-  #    env_file:
-  #      - .env
-  #    ports:
-  #      - "3306:3306"
-  #    volumes:
-  #      - db-data:/db
-  #    networks:
-  #      - mariadb_network
-
   db:
     image: postgres
     restart: always

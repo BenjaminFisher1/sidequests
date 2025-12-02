@@ -1,4 +1,5 @@
-import { quests, questers } from "~~/server/database/migrations/schema";
+import { questers } from "~~/server/database/migrations/schema";
+import { canJoinQuest } from "~~/server/utils/utils";
 
 //Used to query all questers in a given quest
 export default defineEventHandler<{
@@ -7,20 +8,8 @@ export default defineEventHandler<{
   const { user } = await requireUserSession(event);
   const body = await readBody(event);
 
-  //check if quest hostId is the same as the userId
-  //users should not be able to join their own quests lol
-  const questHost = await db.query.quests.findFirst({
-    columns: {
-      hostId: true,
-    },
-    where: eq(quests.id, body.questId),
-  });
-
-  if (questHost?.hostId == user.id)
-    throw createError({
-      statusCode: 400,
-      statusMessage: "You cannot join a quest you have created!",
-    });
+  //will throw error if user cannot join a quest
+  await canJoinQuest(user.id, body.questId);
 
   return db
     .insert(questers)

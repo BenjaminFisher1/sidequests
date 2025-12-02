@@ -15,10 +15,10 @@
     "studio": "drizzle-kit studio"
   },
   "dependencies": {
-    "@nuxt/eslint": "1.10.0",
     "@nuxt/icon": "^2.1.0",
     "@nuxt/image": "2.0.0",
     "@nuxt/ui": "^4.1.0",
+    "@nuxtjs/leaflet": "1.3.2",
     "@simplewebauthn/browser": "^13.2.2",
     "@simplewebauthn/server": "^13.2.2",
     "dotenv": "^17.2.3",
@@ -35,6 +35,7 @@
   },
   "packageManager": "pnpm@10.23.0+sha512.21c4e5698002ade97e4efe8b8b4a89a8de3c85a37919f957e7a0f30f38fbc5bbdd05980ffe29179b2fb6e6e691242e098d945d1601772cad0fef5fb6411e2a4b",
   "devDependencies": {
+    "@iconify-json/material-symbols": "^1.2.48",
     "@types/pg": "^8.15.6",
     "drizzle-kit": "^0.31.7",
     "prettier": "^3.6.2",

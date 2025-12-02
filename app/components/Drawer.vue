@@ -6,14 +6,12 @@ interface Button {
 }
 
 const { user } = useUserSession();
-
 const username = user.value!.username!;
-const link = `/quester/${username}`;
 
 const buttons: Button[] = [
   { to: "/home", src: "/home_icon.gif", alt: "home icon" },
-  { to: "/makequest", src: "/new_post_icon.gif", alt: "post icon" },
-  { to: link, src: "/profile.gif", alt: "profile icon" },
+  { to: "/quests/create", src: "/new_post_icon.gif", alt: "post icon" },
+  { to: `/quester/${username}`, src: "/profile.gif", alt: "profile icon" },
 ];
 </script>
 
@@ -36,5 +34,6 @@ a * {
   max-width: 100%;
   max-height: 100%;
   height: 100%;
+  width: auto;
 }
 </style>

@@ -16,7 +16,7 @@ export const profiles = pgTable("profiles", {
 ]);
 
 export const quests = pgTable("quests", {
-	id: uuid().defaultRandom().notNull(),
+	id: uuid().defaultRandom().primaryKey().notNull(),
 	hostId: uuid("host_id").notNull(),
 	title: varchar({ length: 255 }).notNull(),
 	description: text().notNull(),
@@ -26,7 +26,6 @@ export const quests = pgTable("quests", {
 	endTime: timestamp("end_time", { mode: 'string' }).notNull(),
 	createdAt: timestamp("created_at", { mode: 'string' }).defaultNow().notNull(),
 }, (table) => [
-	uniqueIndex("quests_pk").using("btree", table.id.asc().nullsLast().op("uuid_ops")),
 	check("check_start_before_end", sql`start_time < end_time`),
 ]);
 
@@ -35,7 +34,37 @@ export const questers = pgTable("questers", {
 	userId: uuid("user_id").notNull(),
 	wasAbsent: boolean("was_absent").default(false).notNull(),
 	joinedAt: timestamp("joined_at", { mode: 'string' }).defaultNow().notNull(),
-});
+}, (table) => [
+	foreignKey({
+			columns: [table.questId],
+			foreignColumns: [quests.id],
+			name: "questers_quests_id_fk"
+		}).onDelete("cascade"),
+	foreignKey({
+			columns: [table.userId],
+			foreignColumns: [profiles.id],
+			name: "questers_profiles_id_fk"
+		}).onDelete("cascade"),
+]);
+
+export const comments = pgTable("comments", {
+	id: uuid().defaultRandom().primaryKey().notNull(),
+	userId: uuid("user_id").notNull(),
+	questId: uuid("quest_id").notNull(),
+	content: varchar({ length: 500 }).notNull(),
+	createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+}, (table) => [
+	foreignKey({
+			columns: [table.userId],
+			foreignColumns: [profiles.id],
+			name: "comments_profiles_id_fk"
+		}).onDelete("cascade"),
+	foreignKey({
+			columns: [table.questId],
+			foreignColumns: [quests.id],
+			name: "comments_quests_id_fk"
+		}).onDelete("cascade"),
+]);
 
 export const credentials = pgTable("credentials", {
 	userId: uuid("user_id").notNull(),
