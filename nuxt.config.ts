@@ -26,5 +26,9 @@ export default defineNuxtConfig({
     databaseUrl: process.env.DATABASE_URL,
   },
 
+  nitro: {
+    preset: "bun",
+  },
+
   css: ["~/assets/css/main.css"],
 });
