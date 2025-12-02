@@ -1,41 +1,42 @@
 <script setup lang="ts">
-import type {Tables} from "~/types/database.types";
-
 const props = defineProps<{
-  id: string
-  color?: string
-}>()
+  id: string;
+  color?: string;
+}>();
 
-const quester = ref()
-const questerLink = ref()
-const magic = ref()
-const color = props.color || "bg-violet"
+const quester = ref();
+const questerLink = ref();
+const magic = ref();
+const color = "bg-violet" ?? props.color;
 
-onMounted(async () => {
-  await nextTick()
-  // Wait for the next DOM update cycle
-  const username = await getUsernameFromID(props.id)
-  quester.value = username
-  questerLink.value = `/quester/${username}`
+const { data: profile } = await useFetch("/api/profiles/id", {
+  method: "post",
+  body: { id: props.id },
+  pick: ["username", "questsHosted", "questsCompleted"],
+});
 
-  //set magic!
-  const userData = await getUserDataFromID(props.id)
-  magic.value = (userData?.quests_hosted + userData?.quests_completed) || 0
-})
+const username = profile.value.username;
+quester.value = username;
+questerLink.value = `/quester/${username}`;
+
+//set magic!
+magic.value = profile.value.questsHosted + profile.value.questsCompleted;
 </script>
 
 <template>
-  <div id="quester" class="bg-violet rounded-full flex p-3 size-fit items-center text-sm text-amber-50">
+  <div
+    id="quester"
+    class="bg-violet rounded-full flex p-3 size-fit items-center text-sm text-amber-50"
+  >
     <u>
       <NuxtLink :to="questerLink">{{ quester }}</NuxtLink>
     </u>
 
     <div class="ml-3 pl-2 flex items-center border-l-2 border-amber-50">
-      <UIcon name="solar:star-fall-bold" class="scale-125"/>
+      <UIcon name="solar:star-fall-bold" class="scale-125" />
       <p class="font-extrabold">{{ magic }}</p>
     </div>
   </div>
-
 </template>
 
 <style scoped>
