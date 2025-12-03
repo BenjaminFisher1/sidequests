@@ -51,8 +51,6 @@ _**you should be off to the races! happy developing!**_
 - [x] leave quest confirmation pop-up
 - [x] share quest (access by link)
 - [ ] add joining period for quests (different than quest time!)
-- [ ] location map for quests - [Leaflet](https://leaflet.nuxtjs.org/)
-- [ ] show all quests in map to see what's around
 - [ ] calendar view showing all quests
 - [ ] quest concluding functionality (giving people magic and the credit)
 - [ ] community posts from quests
@@ -60,10 +58,16 @@ _**you should be off to the races! happy developing!**_
 - [ ] figure out how much magic each quest is worth
 - [ ] make factions of questers
 
+### maps
+- [ ] use geocoding api for location autocomplete - [Photon](https://photon.komoot.io/)
+- [ ] location map for quests - [Leaflet](https://leaflet.nuxtjs.org/)
+- [ ] show all quests in map to see what's around
+
 ### profiles
 - [ ] show who you've done quests with in the past
 - [ ] show friends (ranked by magic?)
 - [ ] edit your profile
+- [x] logout button
 
 ### adventures (public quests)
 - [ ] each quest is worth one magic. encourages people to engage with their communities!
@@ -107,6 +111,9 @@ _**you should be off to the races! happy developing!**_
 - [ ] research database safety protocols!
 - [ ] figure out how to get email server running on docker - used for moderation purposes
 - [ ] encrypted group chats!
+
+### public
+- [ ] make landing page super cool
 
 ## future ideas
 - [ ] promote eboards to use sidequests to post adventures!

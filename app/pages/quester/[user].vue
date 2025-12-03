@@ -3,11 +3,11 @@ definePageMeta({
   middleware: "auth",
 });
 
-const user = useRoute().params.user;
+const { user, clear } = useUserSession();
 
 const { data: profileData } = await useFetch("/api/profiles/username", {
   method: "post",
-  body: { user: user },
+  body: { user: useRoute().params.user },
 });
 
 const profile = profileData.value as Profile;
@@ -18,13 +18,29 @@ const { data: questsHosted } = await useFetch("/api/profiles/quests", {
 });
 
 //if user owns account
-const edit = ref(false);
-if (user == profile.username) edit.value = true;
+const edit = ref(user.value!.username == profile.username);
+
+function logout() {
+  clear();
+  navigateTo("/login");
+}
 </script>
 
 <template>
   <div class="flex flex-col w-full p-4 font-scroll">
-    <u class="text-7xl font-extrabold">{{ profile.username }}</u>
+    <div class="flex">
+      <u class="text-7xl font-extrabold w-full">{{ profile.username }}</u>
+      <UButton
+        trailing-icon="material-symbols:exit-to-app-rounded"
+        color="error"
+        variant="subtle"
+        size="md"
+        class="h-1/2 self-center"
+        @click="logout"
+        v-if="edit"
+        >logout</UButton
+      >
+    </div>
 
     <div class="text-3xl">
       <p>
