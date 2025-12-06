@@ -17,6 +17,9 @@ RUN --mount=type=secret,id=nuxt_database_url \
 
 RUN bun --bun run build
 
+# Pushes drizzle schema to database
+RUN bun --bun drizzle-kit push
+
 # copy production dependencies and source code into final image
 FROM oven/bun:1 AS production
 WORKDIR /app
