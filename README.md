@@ -69,6 +69,20 @@ _**you should be off to the races! happy developing!**_
 - [ ] edit your profile
 - [x] logout button
 
+### friends (and the like)
+#### buddies!
+- people can add each other as buddies (maybe through QR code?) and can message each other privately
+- buddies will show up in each other's profile
+- buddy requests must be accepted in order to do these things
+- quests should be able to be filtered by buddies
+- questers that you are friends with should be emphasized
+
+#### quest pals!
+- these are people you have gone on quests with before and will show up on your profile
+- doing quests with new people will give you more magic
+- quest pals will be visible on your profile and will be sorted by magic (descending)
+- receiver
+
 ### adventures (public quests)
 - [ ] each quest is worth one magic. encourages people to engage with their communities!
 - [ ] show how many people are going on this adventure
@@ -84,6 +98,11 @@ _**you should be off to the races! happy developing!**_
   - date
   - magic
 
+### inbox system
+- [ ] should have filters, easily dismissable things, 
+- [ ] push notifications via PWA!!!
+- [ ] webhooks?
+
 ### PWA (progressive web app)
 - [ ] cache relevant UI data
 - [ ] send notifications
@@ -96,6 +115,20 @@ _**you should be off to the races! happy developing!**_
 - [ ] add friends list!
 - [ ] encrypted messaging between friends
 - [ ] add report functionality
+
+### user flair!!!!!
+- we need to give people incentive to engage with their community in a fun way!
+- i think user flair you unlock at higher levels
+- some ideas:
+  - stardust
+  - borders
+  - quest backgrounds
+  - profile backgrounds
+  - animated text as a name
+
+### storage
+- [ ] image upload
+- [ ] (optional) S3 Bucket storage
 
 ### comments
 - [ ] post limit rate for commenting
@@ -114,6 +147,36 @@ _**you should be off to the races! happy developing!**_
 
 ### public
 - [ ] make landing page super cool
+
+### artsy stuff
+- i think everything needs to be animated and ALIVE!!!! i think that every UI is so samey like 
+let's breathe some joy and life into the things we use and make!!! 
+- themes! different colors and such
+
+### documentation
+- wow this project is getting complex and I want it to be easy for any prospective developers to hop right in!
+- i would love to be able to create a wiki!
+- [ ] create a github wiki
+- Create github issues for documentation (tags for different things to work on i.e. Web Design, Database)
+
+#### what needs to be documented?
+- How to get started with development
+  - Populating the db with testing data
+  - Different commands to run and what they do
+  - Basic concepts to research to understand
+
+- The API
+  - API routes
+  - How the API requests data
+  - Nuxt SSR
+  - Drizzle
+  - Postgres
+
+- Creating a docker instance
+  - Development
+  - Explanation of the compose and Dockerfile files
+  - 
+
 
 ## future ideas
 - [ ] promote eboards to use sidequests to post adventures!

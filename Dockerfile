@@ -11,6 +11,10 @@ RUN bun install --frozen-lockfile --ignore-scripts
 # Copy the entire project
 COPY . .
 
+# Give NUXT_DATABASE_URL environment variable to bun for use with Drizzle ORM
+RUN --mount=type=secret,id=nuxt_database_url \
+ export NUXT_DATABASE_URL=$(cat /run/secrets/nuxt_database_url)
+
 RUN bun --bun run build
 
 # copy production dependencies and source code into final image
@@ -21,5 +25,4 @@ WORKDIR /app
 COPY --from=build /app/.output /app
 
 # run the app
-EXPOSE 3000/tcp
 ENTRYPOINT [ "bun", "--bun", "run", "/app/server/index.mjs" ]

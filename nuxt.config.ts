@@ -15,7 +15,17 @@ export default defineNuxtConfig({
     "@nuxt/ui",
     "nuxt-auth-utils",
     "@nuxtjs/leaflet",
+    "@nuxtjs/seo",
   ],
+
+  app: {
+    head: {
+      titleTemplate: "%s — %siteName",
+      templateParams: {
+        siteName: "sidequests!",
+      },
+    },
+  },
 
   auth: {
     webAuthn: true,

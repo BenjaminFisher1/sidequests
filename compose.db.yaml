@@ -1,23 +1,6 @@
 name: sidequests
 
 services:
-  web:
-    container_name: "sidequests-web"
-    build: .
-    secrets:
-      - nuxt_database_url
-    environment:
-      NUXT_DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
-      NUXT_SESSION_PASSWORD: ${NUXT_SESSION_PASSWORD}
-    ports:
-      - "3000:3000"
-    networks:
-      - sidequests
-    depends_on:
-      db:
-        condition: service_healthy
-        restart: true
-
   db:
     container_name: "sidequests-db"
     image: postgres
@@ -26,6 +9,11 @@ services:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: ${POSTGRES_DB}
+
+    env_file:
+      - path: ./.env
+        required: false
+
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}" ]
       interval: 10s
@@ -50,10 +38,6 @@ services:
 networks:
   sidequests:
     driver: bridge
-
-secrets:
-  nuxt_database_url:
-    environment: NUXT_DATABASE_URL
 
 volumes:
   pgdata:
