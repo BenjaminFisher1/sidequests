@@ -2,7 +2,7 @@ name: sidequests
 
 services:
   db:
-    container_name: "sidequests-db"
+    container_name: "sidequests-dev-db"
     image: postgres
     restart: always
     environment:
@@ -25,7 +25,7 @@ services:
     networks:
       - sidequests
     volumes:
-      - pgdata:/var/lib/postgresql
+      - devdata:/var/lib/postgresql
 
   adminer:
     image: adminer
@@ -40,4 +40,4 @@ networks:
     driver: bridge
 
 volumes:
-  pgdata:
+  devdata:
