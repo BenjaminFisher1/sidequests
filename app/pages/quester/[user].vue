@@ -1,24 +1,25 @@
 <script setup lang="ts">
-definePageMeta({
-  middleware: "auth",
-});
+import BuddyButton from "~/components/profile/BuddyButton.vue";
+import Buddies from "~/components/profile/Buddies.vue";
+
+const props = defineProps<{
+  username?: string;
+}>();
 
 const { user, clear } = useUserSession();
 
-const { data: profileData } = await useFetch("/api/profiles/username", {
-  method: "post",
-  body: { user: useRoute().params.user },
-});
+const { data: profileData } = await useFetch(
+  `/api/profiles/user/${props.username || useRoute().params.user}`,
+);
 
 const profile = profileData.value as Profile;
 
-const { data: questsHosted } = await useFetch("/api/profiles/quests", {
-  method: "post",
-  body: { id: profile.id },
-});
+const { data: questsHosted } = await useFetch(
+  `/api/profiles/${profile.id}/quests`,
+);
 
 //if user owns account
-const edit = ref(user.value!.username == profile.username);
+const ownAccount = ref(user.value!.username == profile.username);
 
 function logout() {
   clear();
@@ -27,7 +28,7 @@ function logout() {
 </script>
 
 <template>
-  <div class="flex flex-col w-full p-4 font-scroll">
+  <div class="font-scroll">
     <div class="flex">
       <u class="text-7xl font-extrabold w-full">{{ profile.username }}</u>
       <UButton
@@ -37,7 +38,7 @@ function logout() {
         size="md"
         class="h-1/2 self-center"
         @click="logout"
-        v-if="edit"
+        v-if="ownAccount"
         >logout</UButton
       >
     </div>
@@ -59,6 +60,14 @@ function logout() {
       >
     </div>
 
+    <BuddyButton
+      :profileId="profile.id"
+      :username="profile.username"
+      v-if="!ownAccount"
+    ></BuddyButton>
+
+    <Buddies :profileId="profile.id" :username="profile.username" />
+
     <div
       class="border-l-4 border-amber-100 bg-green-800 opacity-70 rounded-3xl p-4 text-2xl my-6"
       v-if="profile.bio"
@@ -74,6 +83,14 @@ function logout() {
     <div v-if="questsHosted.length > 0" class="font-mono">
       <LazyQuest v-for="quest in questsHosted" :data="quest" />
     </div>
+
+    <!--    <NuxtErrorBoundary>-->
+    <!--      &lt;!&ndash; You use the default slot to render your content &ndash;&gt;-->
+    <!--      <template #error="{ error, clearError }">-->
+    <!--        You can display the error locally here: {{ error }}-->
+    <!--        <button @click="clearError">This will clear the error.</button>-->
+    <!--      </template>-->
+    <!--    </NuxtErrorBoundary>-->
   </div>
 </template>
 

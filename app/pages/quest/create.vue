@@ -20,7 +20,7 @@ const state = reactive<Partial<Schema>>({
 const toast = useToast();
 
 async function onSubmit(event: FormSubmitEvent<Schema>) {
-  await $fetch("/api/quests/create", {
+  await $fetch("/api/quests", {
     method: "post",
     body: { data: event.data },
   })
@@ -39,15 +39,12 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
 </script>
 
 <template>
-  <div
-    id="container"
-    class="font-scroll text-black h-screen w-screen flex flex-col p-6"
-  >
-    <p class="text-5xl">make a quest</p>
+  <div id="container" class="font-scroll h-screen w-screen flex flex-col p-6">
+    <p class="text-5xl text-black">make a quest</p>
     <UForm
       :schema="FormSchema"
       :state="state"
-      class="space-y-4"
+      class="space-y-4 text-black"
       @submit="onSubmit"
     >
       <UFormField label="title" name="title" class="text-3xl">
@@ -87,7 +84,6 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
 #container {
   background: url("~/assets/papertexture.gif") no-repeat center;
   background-size: cover;
-  font-size: 3rem;
 }
 
 div label {

@@ -3,6 +3,17 @@ import { gsap } from "gsap";
 
 definePageMeta({
   layout: false,
+  pageTransition: false,
+  layoutTransition: false,
+});
+
+useSeoMeta({
+  title: "sidequests!",
+  description:
+    "a new magical adventure in the domain of your very own community!",
+  ogDescription:
+    "a new magical adventure in the domain of your very own community!",
+  ogImage: "[og:image]",
 });
 
 onMounted(async () => {
@@ -26,7 +37,7 @@ const route = loggedIn.value ? "/home" : "/login";
     <img
       id="logo"
       class="opacity-0"
-      src="~/assets/sidequests.gif"
+      src="/sidequests-alpha.gif"
       alt="sidequests logo"
     />
     <p class="font-extrabold text-2xl mt-4">
