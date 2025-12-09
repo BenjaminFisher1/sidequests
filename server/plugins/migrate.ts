@@ -1,7 +1,7 @@
 import { migrate } from "drizzle-orm/node-postgres/migrator";
 import { db } from "~~/server/utils/drizzle";
 
-export default defineNitroPlugin(async (nitroApp) => {
+export default defineNitroPlugin(async () => {
   const migrationsPath =
     process.env.NODE_ENV === "production"
       ? "./migrations"

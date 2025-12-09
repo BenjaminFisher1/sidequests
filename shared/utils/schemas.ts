@@ -19,7 +19,14 @@ export const CommentSchema = z.object({
     .max(500, "Comment must be less than 500 characters!"),
 });
 
+export enum BuddyStatus {
+  NotBuddies,
+  Buddies,
+  Pending,
+}
+
 export type Quest = typeof schema.quests.$inferSelect;
 export type Profile = typeof schema.profiles.$inferSelect;
 export type Quester = typeof schema.questers.$inferSelect;
 export type Comment = typeof schema.comments.$inferSelect;
+export type Buddy = typeof schema.buddies.$inferSelect;
