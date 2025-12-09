@@ -27,6 +27,11 @@ export default defineNuxtConfig({
     },
   },
 
+  site: {
+    url: process.env.NUXT_SITE_URL,
+    name: "sidequests!",
+  },
+
   auth: {
     webAuthn: true,
   },
@@ -34,10 +39,15 @@ export default defineNuxtConfig({
   runtimeConfig: {
     // private values only available on server
     databaseUrl: process.env.DATABASE_URL,
+
+    public: {
+      siteUrl: process.env.SITE_URL,
+    },
   },
 
   nitro: {
     preset: "bun",
+    plugins: ["plugins/migrate.ts"],
   },
 
   css: ["~/assets/css/main.css"],
