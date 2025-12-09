@@ -1,9 +1,9 @@
 <script setup lang="ts"></script>
 
 <template>
-  <div class="mb-28">
+  <div>
     <slot />
-    <Drawer />
+    <Drawer :buttons="DrawerButtons" />
   </div>
 </template>
 

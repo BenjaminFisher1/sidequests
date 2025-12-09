@@ -1,30 +1,18 @@
-export async function getProfileFromID(id: string) {
-  const data = await $fetch("/api/profiles/id", {
-    method: "post",
-    body: { id: id },
-  });
+// used for Drawer in Layout
+import type { RouteLocationNormalizedLoadedGeneric } from "vue-router";
 
-  if (!data) createError(`No profile found with id ${id}`);
-
-  return data[0] as Profile;
+export interface DrawerButton {
+  to: string;
+  src: string;
+  alt: string;
 }
 
-export async function getSessionUsername() {
-  const { user } = useUserSession();
-  return user.value!.username!;
-}
-
-export function getUserId() {
-  const { user } = useUserSession();
-  return user.value!.id as string;
-}
-
-export async function getProfileFromUsername(username: string) {
-  return await $fetch("/api/profiles/username", {
-    method: "post",
-    body: { user: username },
-  }).catch(() => createError(`No profile found with username ${username}`));
-}
+export const DrawerButtons: DrawerButton[] = [
+  { to: "/home", src: "/home_icon.gif", alt: "home icon" },
+  { to: "/quest/create", src: "/new_post_icon.gif", alt: "post icon" },
+  { to: "/profile", src: "/profile.gif", alt: "profile icon" },
+  { to: "/inbox", src: "/inbox.gif", alt: "inbox icon" },
+];
 
 export function toastError(msg: string) {
   useToast().add({
@@ -35,31 +23,7 @@ export function toastError(msg: string) {
   });
 }
 
-export function formatDate(date: string) {
-  const d = new Date(date);
-  const months = [
-    "jan",
-    "feb",
-    "mar",
-    "apr",
-    "may",
-    "jun",
-    "jul",
-    "aug",
-    "sep",
-    "oct",
-    "nov",
-    "dec",
-  ];
-  const days = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"];
-  const month = months[d.getMonth()];
-
-  const hours = d.getHours();
-  const ampm = hours < 12 ? "am" : "pm";
-  const getHour = hours > 12 ? hours - 12 : hours;
-  const getMinutes =
-    d.getMinutes() < 10 ? "0" + d.getMinutes() : d.getMinutes();
-  const time = `${getHour}:${getMinutes}${ampm}`;
-
-  return `${time} ${days[d.getDay()]} ${month} ${d.getDate()}`;
-}
+export function determineTransition(
+  from: RouteLocationNormalizedLoadedGeneric,
+  to: RouteLocationNormalizedLoadedGeneric,
+) {}
