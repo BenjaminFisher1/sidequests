@@ -6,26 +6,25 @@ const props = defineProps<{
 const numQuesters = ref(0);
 
 //see if user can join quest
-const { data: canJoin } = await useFetch("/api/quests/canJoin", {
-  method: "post",
-  body: { questId: props.questId },
-});
+const { data: canJoin } = await useFetch(
+  `/api/quests/${props.questId}/questers/can-join`,
+);
 
 //gets all questers
-const { data: questers, refresh } = await useFetch("/api/quests/questers", {
-  method: "post",
-  body: { id: props.questId },
-
-  //transform used to limit how much data is saved to payload. only what is necessary!
-  transform: (questers) => {
-    return questers.map((quester: Quester) => ({
-      userId: quester.userId,
-      joinedAt: quester.joinedAt,
-    }));
+const { data: questers, refresh } = await useFetch(
+  `/api/quests/${props.questId}/questers`,
+  {
+    //transform used to limit how much data is saved to payload. only what is necessary!
+    transform: (questers) => {
+      return questers.map((quester: Quester) => ({
+        userId: quester.userId,
+        joinedAt: quester.joinedAt,
+      }));
+    },
   },
-});
+);
 
-numQuesters.value = questers.value.length;
+numQuesters.value = questers.value?.length ?? 0;
 
 async function joinQuest() {
   numQuesters.value++;
@@ -51,16 +50,16 @@ async function leaveQuest() {
       >
         be the first to join!
       </p>
-      <Quester
+      <LazyQuester
         v-for="quester in questers"
         :key="quester.joinedAt"
         :id="quester.userId"
       />
     </div>
 
-    <QuestJoin
+    <LazyQuestJoin
       :questId="questId"
-      :canJoin="canJoin"
+      :canJoin="canJoin ?? false"
       @join="joinQuest"
       @leave="leaveQuest"
     />

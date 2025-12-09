@@ -10,11 +10,10 @@ const emit = defineEmits(["join", "leave"]);
 const questJoined = ref(false);
 
 //check if the user has joined the quest!
-const { data: userJoined } = await useFetch("/api/questers/joined", {
-  method: "post",
-  body: { questId: props.questId, userId: getUserId() },
-});
-questJoined.value = userJoined.value;
+const { data: userJoined } = await useFetch(
+  `/api/quests/${props.questId}/questers/joined`,
+);
+questJoined.value = userJoined.value ?? questJoined.value;
 
 async function openPopup() {
   const popup = useOverlay().create(QuestPopup);
@@ -32,9 +31,8 @@ async function openPopup() {
 }
 
 async function joinQuest() {
-  await $fetch("/api/quests/join", {
+  await $fetch(`/api/quests/${props.questId}/questers`, {
     method: "post",
-    body: { questId: props.questId },
   })
     .then(async () => {
       questJoined.value = true;
@@ -54,8 +52,8 @@ async function joinQuest() {
 }
 
 async function leaveQuest() {
-  await $fetch("/api/quests/leave", {
-    method: "post",
+  await $fetch(`/api/quests/${props.questId}/questers`, {
+    method: "delete",
     body: { questId: props.questId },
   })
     .then(async () => {

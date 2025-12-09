@@ -15,37 +15,23 @@ onMounted(async () => {
   //     .from(".questPost", {xPercent: -200, duration: 0.5, ease: "ease.inOut"})
 });
 
-function whenIsQuest(start: string, end: string) {
-  const differenceFromStart = new Date(start).valueOf() - Date.now();
-  const differenceFromEnd = new Date(end).valueOf() - Date.now();
+async function copyLink() {
+  const config = useRuntimeConfig();
+  const link = `${config.public.siteUrl}/quest/${props.data.id}`;
 
-  if (differenceFromStart < 0 && differenceFromEnd > 0)
-    return "quest in progress!";
-  if (differenceFromEnd < 0) return "quest inactive!";
-
-  // Convert to total seconds
-  const totalSeconds = Math.floor(differenceFromStart / 1000);
-
-  // Derive hours, minutes, and seconds
-  const minutes = Math.floor((totalSeconds % 3600) / 60);
-  const hours = Math.floor(totalSeconds / 3600);
-  const days = Math.floor(hours / 24);
-
-  const startsIn = "quest starts in ";
-
-  if (days >= 1) return `${startsIn} ${days} days`;
-  if (hours > 1) return `${startsIn} ${hours} hours`;
-  if (minutes >= 1) return `${startsIn} ${minutes} mins`;
-  else return "happening Right Now!";
+  try {
+    await navigator.clipboard.writeText(link);
+    useToast().add({ title: "Quest link copied to clipboard!" });
+  } catch (err) {
+    console.error("Failed to copy: ", err);
+  }
 }
 </script>
 
 <template>
-  <div class="questPost opacity-80">
-    <div
-      class="rounded-t-3xl bg-quest p-4 flex flex-col font-mono text-amber-50"
-    >
-      <Quester :id="data.hostId" />
+  <div class="questPost opacity-80 rounded-3xl">
+    <div class="p-4 flex flex-col font-mono text-amber-50">
+      <LazyQuester :id="data.hostId" />
 
       <i class="text-2xl font-extrabold mt-2">{{ data.title }}</i>
       <p class="text-sm">{{ data.description }}</p>
@@ -56,11 +42,39 @@ function whenIsQuest(start: string, end: string) {
           <p>{{ data.location }}</p>
         </div>
 
-        <p class="text-sm text-quest font-bold">
-          {{ whenIsQuest(data.startTime, data.endTime) }}
-        </p>
-        <p>starts: {{ formatDate(data.startTime) }}</p>
-        <p>ends: {{ formatDate(data.endTime) }}</p>
+        <div class="lowercase">
+          <p class="text-sm text-quest font-bold">
+            <LazyNuxtTime
+              :datetime="data.startTime"
+              numeric="auto"
+              relative
+              relative-style="long"
+            />
+          </p>
+
+          <p>
+            starts:
+            <LazyNuxtTime
+              :datetime="data.startTime"
+              month="short"
+              day="numeric"
+              weekday="short"
+              hour="2-digit"
+              minute="2-digit"
+            />
+          </p>
+          <p>
+            ends:
+            <LazyNuxtTime
+              :datetime="data.endTime"
+              month="short"
+              day="numeric"
+              weekday="short"
+              hour="2-digit"
+              minute="2-digit"
+            />
+          </p>
+        </div>
       </div>
 
       <Questers :questId="data.id" />
@@ -71,6 +85,7 @@ function whenIsQuest(start: string, end: string) {
           color="secondary"
           size="md"
           variant="subtle"
+          @click="copyLink"
         />
 
         <UButton
@@ -86,4 +101,13 @@ function whenIsQuest(start: string, end: string) {
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.questPost {
+  background: #7a1768;
+  background: linear-gradient(
+    -180deg,
+    rgba(122, 23, 104, 1) 0%,
+    rgba(3, 89, 102, 1) 100%
+  );
+}
+</style>

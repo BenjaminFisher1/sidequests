@@ -7,12 +7,11 @@ const props = defineProps<{
   questId: string;
 }>();
 
-const { data: commentsData, refresh } = await useFetch("/api/quests/comments", {
-  method: "post",
-  body: { questId: props.questId },
-});
+const { data: commentsData, refresh } = await useFetch(
+  `/api/quests/${props.questId}/comments`,
+);
 
-const comments = commentsData.value as Comment[];
+const comments = commentsData.value ? (commentsData!.value as Comment[]) : [];
 
 type Schema = z.output<typeof CommentSchema>;
 
@@ -21,7 +20,7 @@ const state = reactive<Partial<Schema>>({
 });
 
 async function onSubmit(event: FormSubmitEvent<Schema>) {
-  await $fetch("/api/comments/create", {
+  await $fetch(`/api/quests/${props.questId}/comments`, {
     method: "post",
     body: { questId: props.questId, content: event.data.content },
   });
@@ -31,12 +30,12 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
 </script>
 
 <template>
-  <div class="rounded-b-3xl p-4 bg-cyan-700 flex flex-col">
+  <div class="rounded-b-3xl p-4 flex flex-col font-mono">
     <p class="text-md font-bold">comments ({{ comments.length }})</p>
 
     <!--    sort by recent-->
     <div class="flex flex-col-reverse">
-      <QuestComment
+      <LazyQuestComment
         v-for="comment in comments"
         :data="comment"
         :key="comment.createdAt"

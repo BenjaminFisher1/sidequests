@@ -10,11 +10,18 @@ const showOptions = ref(false);
 
 <template>
   <div>
-    <Quester :id="data.userId" color="green" class="opacity-75"></Quester>
-    <div class="bg-cyan-900 rounded-3xl p-4 pt-2 w-fit flex gap-2 items-center">
+    <Quester :id="data.userId" class="opacity-75"></Quester>
+    <div class="bg-cyan-700 rounded-3xl p-4 pt-2 w-fit flex gap-2 items-center">
       <div class="flex flex-col">
         <p class="my-2">{{ props.data.content }}</p>
-        <p class="text-xs">{{ formatDate(data.createdAt) }}</p>
+        <LazyNuxtTime
+          :datetime="data.createdAt"
+          numeric="auto"
+          relative
+          relative-style="short"
+          class="text-xs"
+        />
+
         <Transition>
           <div v-if="showOptions" class="mt-2">
             <UButton

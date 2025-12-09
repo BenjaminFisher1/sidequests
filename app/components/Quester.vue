@@ -6,30 +6,27 @@ const props = defineProps<{
 
 const quester = ref();
 const questerLink = ref();
-const magic = ref();
-const color = "bg-violet" ?? props.color;
+const magic = ref(0);
 
-const { data: profile } = await useFetch("/api/profiles/id", {
-  method: "post",
-  body: { id: props.id },
+const { data: profile } = await useFetch(`/api/profiles/${props.id}`, {
   pick: ["username", "questsHosted", "questsCompleted"],
 });
 
-const username = profile.value.username;
+const username = profile.value?.username;
 quester.value = username;
 questerLink.value = `/quester/${username}`;
 
 //set magic!
-magic.value = profile.value.questsHosted + profile.value.questsCompleted;
+magic.value = profile.value?.questsHosted + profile.value?.questsCompleted ?? 0;
 </script>
 
 <template>
   <div
     id="quester"
-    class="bg-violet rounded-full flex p-3 size-fit items-center text-sm text-amber-50"
+    class="bg-violet rounded-full flex p-3 size-fit items-center text-sm"
   >
     <u>
-      <NuxtLink :to="questerLink">{{ quester }}</NuxtLink>
+      <NuxtLink :to="questerLink" class="text-text">{{ quester }}</NuxtLink>
     </u>
 
     <div class="ml-3 pl-2 flex items-center border-l-2 border-amber-50">

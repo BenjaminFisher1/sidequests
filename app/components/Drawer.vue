@@ -1,39 +1,45 @@
 <script setup lang="ts">
-interface Button {
-  to: string;
-  src: string;
-  alt: string;
-}
-
-const { user } = useUserSession();
-const username = user.value!.username!;
-
-const buttons: Button[] = [
-  { to: "/home", src: "/home_icon.gif", alt: "home icon" },
-  { to: "/quests/create", src: "/new_post_icon.gif", alt: "post icon" },
-  { to: `/quester/${username}`, src: "/profile.gif", alt: "profile icon" },
-];
+const props = defineProps<{
+  buttons: DrawerButton[];
+}>();
 </script>
 
 <template>
-  <div class="fixed bottom-0 left-0 w-full p-2">
+  <div class="fixed bottom-2 left-0 w-full p-2 z-50">
     <div
-      id="drawer"
-      class="rounded-full bg-quest opacity-75 left-0 w-full h-28 p-4 grid grid-cols-3 place-items-center"
+      class="rounded-full bg-quest opacity-75 m-auto left-0 w-5/6 h-20 p-2 grid grid-flow-col"
     >
       <NuxtLink v-for="button in buttons" :to="button.to">
-        <NuxtImg :src="button.src" :alt="button.alt" />
+        <img :src="button.src" :alt="button.alt" />
       </NuxtLink>
     </div>
   </div>
 </template>
 
 <style scoped>
-a * {
+a > img {
+  width: 0;
+  height: 0;
+  min-height: 100%;
+  min-width: 100%;
   object-fit: contain;
-  max-width: 100%;
-  max-height: 100%;
-  height: 100%;
-  width: auto;
+}
+
+.router-link-active {
+  transition: scale 0.25s ease-in-out;
+  scale: 1.2;
+  filter: drop-shadow(5px 5px 9px #ed3399);
+}
+
+.router-link-active::before {
+  position: absolute;
+  content: "★";
+  font-size: 2rem;
+  color: darkcyan;
+
+  left: 50%;
+  bottom: 0;
+  transition: all 0.25s ease-in-out;
+  transform: translate(-50%, 50%);
 }
 </style>
