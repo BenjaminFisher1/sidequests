@@ -1,5 +1,4 @@
 import { drizzle } from "drizzle-orm/node-postgres";
-import "dotenv/config";
 
 import * as schema from "../database/migrations/schema";
 import * as relations from "../database/migrations/relations";

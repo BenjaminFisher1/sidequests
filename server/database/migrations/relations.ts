@@ -1,27 +1,5 @@
 import { relations } from "drizzle-orm/relations";
-import { quests, questers, profiles, comments, credentials } from "./schema";
-
-export const questersRelations = relations(questers, ({one}) => ({
-	quest: one(quests, {
-		fields: [questers.questId],
-		references: [quests.id]
-	}),
-	profile: one(profiles, {
-		fields: [questers.userId],
-		references: [profiles.id]
-	}),
-}));
-
-export const questsRelations = relations(quests, ({many}) => ({
-	questers: many(questers),
-	comments: many(comments),
-}));
-
-export const profilesRelations = relations(profiles, ({many}) => ({
-	questers: many(questers),
-	comments: many(comments),
-	credentials: many(credentials),
-}));
+import { profiles, comments, quests, questers, credentials } from "./schema";
 
 export const commentsRelations = relations(comments, ({one}) => ({
 	profile: one(profiles, {
@@ -30,6 +8,28 @@ export const commentsRelations = relations(comments, ({one}) => ({
 	}),
 	quest: one(quests, {
 		fields: [comments.questId],
+		references: [quests.id]
+	}),
+}));
+
+export const profilesRelations = relations(profiles, ({many}) => ({
+	comments: many(comments),
+	questers: many(questers),
+	credentials: many(credentials),
+}));
+
+export const questsRelations = relations(quests, ({many}) => ({
+	comments: many(comments),
+	questers: many(questers),
+}));
+
+export const questersRelations = relations(questers, ({one}) => ({
+	profile: one(profiles, {
+		fields: [questers.userId],
+		references: [profiles.id]
+	}),
+	quest: one(quests, {
+		fields: [questers.questId],
 		references: [quests.id]
 	}),
 }));

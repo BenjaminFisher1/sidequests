@@ -1,10 +1,10 @@
-import { pgTable, uniqueIndex, uuid, varchar, text, integer, timestamp, check, boolean, foreignKey, primaryKey } from "drizzle-orm/pg-core"
+import { pgTable, uniqueIndex, uuid, varchar, text, integer, timestamp, foreignKey, check, boolean, primaryKey } from "drizzle-orm/pg-core"
 import { sql } from "drizzle-orm"
 
 
 
 export const profiles = pgTable("profiles", {
-	id: uuid().defaultRandom().notNull(),
+	id: uuid().defaultRandom().primaryKey().notNull(),
 	username: varchar({ length: 64 }).notNull(),
 	bio: text(),
 	questsHosted: integer("quests_hosted").default(0).notNull(),
@@ -13,38 +13,6 @@ export const profiles = pgTable("profiles", {
 	createdAt: timestamp("created_at", { mode: 'string' }).defaultNow().notNull(),
 }, (table) => [
 	uniqueIndex("profiles_username_pk").using("btree", table.username.asc().nullsLast().op("text_ops")),
-]);
-
-export const quests = pgTable("quests", {
-	id: uuid().defaultRandom().primaryKey().notNull(),
-	hostId: uuid("host_id").notNull(),
-	title: varchar({ length: 255 }).notNull(),
-	description: text().notNull(),
-	location: varchar({ length: 255 }).notNull(),
-	isActive: boolean("is_active").default(true).notNull(),
-	startTime: timestamp("start_time", { mode: 'string' }).notNull(),
-	endTime: timestamp("end_time", { mode: 'string' }).notNull(),
-	createdAt: timestamp("created_at", { mode: 'string' }).defaultNow().notNull(),
-}, (table) => [
-	check("check_start_before_end", sql`start_time < end_time`),
-]);
-
-export const questers = pgTable("questers", {
-	questId: uuid("quest_id").notNull(),
-	userId: uuid("user_id").notNull(),
-	wasAbsent: boolean("was_absent").default(false).notNull(),
-	joinedAt: timestamp("joined_at", { mode: 'string' }).defaultNow().notNull(),
-}, (table) => [
-	foreignKey({
-			columns: [table.questId],
-			foreignColumns: [quests.id],
-			name: "questers_quests_id_fk"
-		}).onDelete("cascade"),
-	foreignKey({
-			columns: [table.userId],
-			foreignColumns: [profiles.id],
-			name: "questers_profiles_id_fk"
-		}).onDelete("cascade"),
 ]);
 
 export const comments = pgTable("comments", {
@@ -64,6 +32,48 @@ export const comments = pgTable("comments", {
 			foreignColumns: [quests.id],
 			name: "comments_quests_id_fk"
 		}).onDelete("cascade"),
+]);
+
+export const quests = pgTable("quests", {
+	id: uuid().defaultRandom().primaryKey().notNull(),
+	hostId: uuid("host_id").notNull(),
+	title: varchar({ length: 255 }).notNull(),
+	description: text().notNull(),
+	location: varchar({ length: 255 }).notNull(),
+	isActive: boolean("is_active").default(true).notNull(),
+	startTime: timestamp("start_time", { withTimezone: true, mode: 'string' }).notNull(),
+	endTime: timestamp("end_time", { withTimezone: true, mode: 'string' }).notNull(),
+	createdAt: timestamp("created_at", { mode: 'string' }).defaultNow().notNull(),
+}, (table) => [
+	check("check_start_before_end", sql`start_time < end_time`),
+]);
+
+export const questers = pgTable("questers", {
+	questId: uuid("quest_id").notNull(),
+	userId: uuid("user_id").notNull(),
+	wasAbsent: boolean("was_absent").default(false).notNull(),
+	joinedAt: timestamp("joined_at", { mode: 'string' }).defaultNow().notNull(),
+}, (table) => [
+	foreignKey({
+			columns: [table.userId],
+			foreignColumns: [profiles.id],
+			name: "questers_profiles_id_fk"
+		}).onDelete("cascade"),
+	foreignKey({
+			columns: [table.questId],
+			foreignColumns: [quests.id],
+			name: "questers_quests_id_fk"
+		}).onDelete("cascade"),
+]);
+
+export const buddies = pgTable("buddies", {
+	senderUserId: uuid("sender_user_id").notNull(),
+	receiverUserId: uuid("receiver_user_id").notNull(),
+	sentAt: timestamp("sent_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+	acceptedAt: timestamp("accepted_at", { withTimezone: true, mode: 'string' }),
+}, (table) => [
+	primaryKey({ columns: [table.senderUserId, table.receiverUserId], name: "buddies_pk"}),
+	check("users_are_different", sql`sender_user_id IS DISTINCT FROM receiver_user_id`),
 ]);
 
 export const credentials = pgTable("credentials", {

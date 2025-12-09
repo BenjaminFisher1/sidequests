@@ -2,24 +2,24 @@ import { z } from "zod";
 import { credentials, profiles } from "~~/server/database/migrations/schema";
 
 export default defineWebAuthnRegisterEventHandler({
-  async storeChallenge(event, challenge, attemptId) {
-    await useStorage().setItem(`auth:challenge:${attemptId}`, challenge, {
-      ttl: 60,
-    });
-  },
-  async getChallenge(event, attemptId) {
-    const challenge = await useStorage().getItem<string>(
-      `auth:challenge:${attemptId}`,
-    );
-    if (!challenge) {
-      throw createError({
-        statusCode: 400,
-        statusMessage: "Challenge not found or expired",
-      });
-    }
-    await useStorage().removeItem(`auth:challenge:${attemptId}`);
-    return challenge;
-  },
+  // async storeChallenge(event, challenge, attemptId) {
+  //   await useStorage().setItem(`auth:challenge:${attemptId}`, challenge, {
+  //     ttl: 60,
+  //   });
+  // },
+  // async getChallenge(event, attemptId) {
+  //   const challenge = await useStorage().getItem<string>(
+  //     `auth:challenge:${attemptId}`,
+  //   );
+  //   if (!challenge) {
+  //     throw createError({
+  //       statusCode: 400,
+  //       statusMessage: "Challenge not found or expired",
+  //     });
+  //   }
+  //   await useStorage().removeItem(`auth:challenge:${attemptId}`);
+  //   return challenge;
+  // },
 
   validateUser: (user) =>
     z

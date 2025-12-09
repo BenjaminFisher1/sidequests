@@ -1,7 +1,9 @@
 import { comments } from "~~/server/database/migrations/schema";
+import { parseRouteId } from "~~/server/utils/utils";
 
+//TODO add comment schema parsing
 export default defineEventHandler<{
-  body: { questId: string; content: string };
+  body: { content: string };
 }>(async (event) => {
   const { user } = await requireUserSession(event);
   const body = await readBody(event);
@@ -12,9 +14,11 @@ export default defineEventHandler<{
   // if (result.error)
   //   throw createError({ statusCode: 400, statusMessage: result.error.message });
 
+  const questId = parseRouteId(event.context.params?.id);
+
   return db.insert(comments).values({
     userId: user.id,
-    questId: body.questId,
+    questId: questId,
     content: body.content,
   });
 });
