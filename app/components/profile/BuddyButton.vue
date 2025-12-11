@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { BuddyStatus } from "#shared/utils/schemas";
+import type { ToastProps } from "@nuxt/ui/components/Toast.vue";
 
 const props = defineProps<{
   profileId: string;
@@ -9,7 +10,7 @@ const props = defineProps<{
 const open = ref(false);
 
 const { data: status, refresh } = await useFetch(
-  `/api/buddies/${props.profileId}`,
+  `/api/buddies/${props.profileId}/status`,
 );
 
 interface ButtonState {
@@ -33,12 +34,18 @@ const buddyButtonStates: ButtonState[] = [
     color: "secondary",
     text: "buddy request sent!",
   },
+  {
+    icon: "pixelarticons:message-processing",
+    color: "warning",
+    text: "accept buddy request?",
+  },
 ];
 
 const nayButtonStates: ButtonState[] = [
   { icon: "pixelarticons:mood-sad", color: "error", text: "nay..." },
   { icon: "pixelarticons:human-handsup", color: "primary", text: "nay!" },
   { icon: "pixelarticons:mood-happy", color: "primary", text: "nay!" },
+  { icon: "pixelarticons:mood-sad", color: "error", text: "nay..." },
 ];
 
 const yayButtonStates: ButtonState[] = [
@@ -49,6 +56,7 @@ const yayButtonStates: ButtonState[] = [
     text: "yay...",
   },
   { icon: "pixelarticons:mail-delete", color: "error", text: "yay" },
+  { icon: "pixelarticons:human-handsup", color: "primary", text: "yay!" },
 ];
 
 const buttonState = computed(() => buddyButtonStates[status.value]!);
@@ -58,25 +66,46 @@ const yayButtonState = computed(() => yayButtonStates[status.value]!);
 async function yayAction() {
   switch (status.value as BuddyStatus) {
     case BuddyStatus.NotBuddies:
-      await update("post", "huzzah! buddy request sent!");
+      await update("post", {
+        title: "huzzah! buddy request sent!",
+        icon: "streamline-pixel:social-rewards-rating-star-1",
+      });
       break;
 
     case BuddyStatus.Buddies:
-      await update("delete", "buddy removed... devastating");
+      await update("delete", {
+        title: "buddy removed... devastating",
+        icon: "streamline-pixel:hand-dislike",
+        color: "error",
+      });
       break;
 
-    case BuddyStatus.Pending:
-      await update("delete", "buddy request cancelled");
+    case BuddyStatus.SentPending:
+      await update("delete", {
+        title: "buddy request cancelled",
+        icon: "streamline-pixel:romance-heart-lock",
+        color: "warning",
+      });
+      break;
+
+    case BuddyStatus.ReceivedPending:
+      await update("patch", {
+        title: "huzzah! buddy request accepted!",
+        icon: "streamline-pixel:music-notes-music-2",
+      });
       break;
   }
 
-  async function update(method: "post" | "delete", msg: string) {
+  async function update(
+    method: "post" | "delete" | "patch",
+    toast: ToastProps,
+  ) {
     await $fetch("/api/buddies", {
       method: method,
       body: { buddyId: props.profileId },
     })
       .then(() => {
-        useToast().add({ title: msg });
+        useToast().add(toast);
       })
       .catch((error) => {
         toastError(error.message);
@@ -110,8 +139,13 @@ async function yayAction() {
           remove <u class="font-bold">{{ username }}</u> as a buddy?
         </p>
 
-        <p v-else-if="status == BuddyStatus.Pending">
+        <p v-else-if="status == BuddyStatus.SentPending">
           cancel buddy request to <u class="font-bold">{{ username }}</u
+          >?
+        </p>
+
+        <p v-else-if="status == BuddyStatus.ReceivedPending">
+          accept buddy request from <u class="font-bold">{{ username }}</u
           >?
         </p>
 

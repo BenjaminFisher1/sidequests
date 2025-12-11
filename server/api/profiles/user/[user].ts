@@ -13,5 +13,8 @@ export default defineEventHandler(async (event) => {
 
   return (await db.query.profiles.findFirst({
     where: eq(profiles.username, user),
+    with: {
+      quests: true,
+    },
   })) as Profile;
 });

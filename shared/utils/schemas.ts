@@ -22,7 +22,8 @@ export const CommentSchema = z.object({
 export enum BuddyStatus {
   NotBuddies,
   Buddies,
-  Pending,
+  SentPending,
+  ReceivedPending,
 }
 
 export type Quest = typeof schema.quests.$inferSelect;
