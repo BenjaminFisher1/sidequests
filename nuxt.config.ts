@@ -28,7 +28,6 @@ export default defineNuxtConfig({
   },
 
   site: {
-    url: process.env.NUXT_SITE_URL,
     name: "sidequests!",
   },
 
@@ -39,10 +38,6 @@ export default defineNuxtConfig({
   runtimeConfig: {
     // private values only available on server
     databaseUrl: process.env.DATABASE_URL,
-
-    public: {
-      siteUrl: process.env.SITE_URL,
-    },
   },
 
   nitro: {

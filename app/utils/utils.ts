@@ -22,8 +22,3 @@ export function toastError(msg: string) {
     color: "error",
   });
 }
-
-export function determineTransition(
-  from: RouteLocationNormalizedLoadedGeneric,
-  to: RouteLocationNormalizedLoadedGeneric,
-) {}
