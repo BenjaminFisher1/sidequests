@@ -85,7 +85,7 @@ function logout() {
           no quests hosted yet :(
         </p>
 
-        <div v-else class="font-mono">
+        <div v-else class="font-mono mb-22 flex flex-col gap-4">
           <LazyQuest
             v-for="quest in profile!.quests"
             :data="quest"

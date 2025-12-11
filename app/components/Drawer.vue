@@ -5,7 +5,7 @@ const props = defineProps<{
 </script>
 
 <template>
-  <div class="fixed bottom-2 left-0 w-full p-2 z-50">
+  <div class="fixed bottom-3 left-0 w-full z-50">
     <div
       class="rounded-full bg-quest opacity-75 m-auto left-0 w-5/6 h-20 p-2 grid grid-flow-col"
     >
