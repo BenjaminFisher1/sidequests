@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import Questers from "~/components/quest/Questers.vue";
-import Comments from "~/components/quest/Comments.vue";
+import CommentsPreview from "~/components/quest/CommentsPreview.vue";
 
 const props = defineProps<{
   data: Quest;
@@ -16,8 +16,7 @@ onMounted(async () => {
 });
 
 async function copyLink() {
-  const config = useRuntimeConfig();
-  const link = `${config.public.siteUrl}/quest/${props.data.id}`;
+  const link = `https://${window.location.host}/quest/${props.data.id}`;
 
   try {
     await navigator.clipboard.writeText(link);
@@ -97,7 +96,7 @@ async function copyLink() {
       </div>
     </div>
 
-    <Comments :questId="props.data.id" />
+    <CommentsPreview :questId="props.data.id" />
   </div>
 </template>
 
