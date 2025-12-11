@@ -58,12 +58,17 @@ _**you should be off to the races! happy developing!**_
 - [ ] figure out how much magic each quest is worth
 - [ ] make factions of questers
 
+### login
+- [ ] save cookie if account created and check if exists on login so that user is prompted to sign up by default
+- [ ] add fun icons to distinguish sign in and register
+
 ### maps
 - [ ] use geocoding api for location autocomplete - [Photon](https://photon.komoot.io/)
 - [ ] location map for quests - [Leaflet](https://leaflet.nuxtjs.org/)
 - [ ] show all quests in map to see what's around
 
 ### profiles
+- [x] long ass username marquee
 - [ ] show who you've done quests with in the past
 - [ ] show friends (ranked by magic?)
 - [ ] edit your profile
@@ -100,6 +105,10 @@ _**you should be off to the races! happy developing!**_
 
 ### inbox system
 - [ ] should have filters, easily dismissable things, 
+- [ ] people joining your quests
+- [x] buddy notifications
+- [ ] refresh button
+- [ ] dismissable notifications (?)
 - [ ] push notifications via PWA!!!
 - [ ] webhooks?
 
