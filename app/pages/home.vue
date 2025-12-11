@@ -2,7 +2,7 @@
 definePageMeta({
   middleware: "auth",
 });
-const { pending, data: quests } = useFetch("/api/quests/active");
+const { pending, data: quests } = useLazyFetch("/api/quests/active");
 </script>
 
 <template>
