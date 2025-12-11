@@ -6,9 +6,9 @@ services:
     image: postgres
     restart: always
     environment:
-      POSTGRES_USER: sidequests
+      POSTGRES_USER: "sidequests"
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_DB: public
+      POSTGRES_DB: "public"
 
     env_file:
       - path: ./.env
