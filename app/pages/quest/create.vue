@@ -39,43 +39,53 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
 </script>
 
 <template>
-  <div id="container" class="font-scroll h-screen w-screen flex flex-col p-6">
-    <p class="text-5xl text-black">make a quest</p>
+  <div id="container" class="h-screen w-screen flex flex-col p-6">
+    <p class="text-5xl text-black font-extrabold font-scroll">make a quest</p>
     <UForm
       :schema="FormSchema"
       :state="state"
-      class="space-y-4 text-black"
+      class="space-y-4 text-black mb-22"
       @submit="onSubmit"
     >
-      <UFormField label="title" name="title" class="text-3xl">
-        <UInput v-model="state.title" placeholder="name thy quest!" />
-      </UFormField>
-
-      <UFormField label="description" name="description">
-        <UInput v-model="state.description" placeholder="describe thy quest!" />
-      </UFormField>
-
-      <UFormField label="start date" name="startDate">
-        <input v-model="state.startTime" type="datetime-local" />
-      </UFormField>
-
-      <UFormField label="end date" name="endDate">
-        <input v-model="state.endTime" type="datetime-local" />
-      </UFormField>
-
-      <UFormField label="location" name="location">
-        <UInput v-model="state.location" placeholder="where is thy quest?" />
-      </UFormField>
-
-      <UFormField label="imagery" name="imageURL">
-        <UFileUpload
-          v-model="state.image"
-          label="upload thy image here!"
-          class="w-75 min-h-48"
+      <UFormField label="title" name="title" size="xl">
+        <UTextarea
+          v-model="state.title"
+          placeholder="name thy quest!"
+          autoresize
         />
       </UFormField>
 
-      <UButton type="submit"> Submit </UButton>
+      <UFormField label="description" name="description" size="xl">
+        <UTextarea
+          v-model="state.description"
+          placeholder="describe thy quest!"
+          autoresize
+        />
+      </UFormField>
+
+      <UFormField label="start date" name="startDate" size="xl">
+        <input v-model="state.startTime" type="datetime-local" />
+      </UFormField>
+
+      <UFormField label="end date" name="endDate" size="xl">
+        <input v-model="state.endTime" type="datetime-local" />
+      </UFormField>
+
+      <UFormField label="location" name="location" size="xl">
+        <UInput
+          v-model="state.location"
+          icon="material-symbols:map-pin-heart-rounded"
+          placeholder="where is thy quest?"
+        />
+      </UFormField>
+
+      <UButton
+        type="submit"
+        icon="streamline-pixel:content-files-quill-ink"
+        size="xl"
+      >
+        Submit
+      </UButton>
     </UForm>
   </div>
 </template>
@@ -84,6 +94,10 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
 #container {
   background: url("~/assets/papertexture.gif") no-repeat center;
   background-size: cover;
+}
+
+label {
+  color: white;
 }
 
 div label {
