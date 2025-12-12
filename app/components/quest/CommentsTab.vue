@@ -55,6 +55,7 @@ const {
             v-for="comment in comments"
             :data="comment"
             :key="comment.createdAt"
+            hydrate-on-visible
           />
         </div>
       </div>

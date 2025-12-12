@@ -3,6 +3,7 @@ import type { Comment } from "~~/shared/utils/schemas";
 
 const props = defineProps<{
   data: Comment;
+  preview?: boolean;
 }>();
 
 const showOptions = ref(false);
@@ -34,7 +35,7 @@ const showOptions = ref(false);
         </Transition>
       </div>
 
-      <UCollapsible>
+      <UCollapsible v-if="!preview">
         <UButton
           trailing-icon="material-symbols:arrow-drop-down-rounded"
           class="group"

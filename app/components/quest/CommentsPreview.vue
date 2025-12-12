@@ -25,13 +25,19 @@ const { data: length } = await useFetch(
     <NuxtLoadingIndicator v-if="pending" />
 
     <div v-else class="flex flex-col gap-2">
-      <div class="grid grid-cols-2 grid-flow-row-dense items-center gap-2">
+      <UMarquee
+        :overlay="false"
+        class="grid grid-flow-col-dense auto-cols-max h-max-20"
+      >
         <LazyQuestComment
           v-for="comment in comments"
           :data="comment"
+          :preview="true"
           :key="comment.createdAt"
+          class="w-40"
+          hydrate-on-visible
         />
-      </div>
+      </UMarquee>
 
       <CommentsTab :questId="questId" />
     </div>
