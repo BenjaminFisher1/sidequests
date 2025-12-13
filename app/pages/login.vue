@@ -17,6 +17,7 @@ const sign = ref<"in" | "up">("in");
 const router = useRouter();
 
 onMounted(() => {
+  //Max cookie age is 30 days (represented in seconds)
   const visited = useCookie('visited', { maxAge: 60 * 60 * 24 * 30 });
   
   //if cookie "visited" does not exist, set it and switch to sign up :)
