@@ -14,6 +14,20 @@ const { register, authenticate } = useWebAuthn({
 
 const toast = useToast();
 const sign = ref<"in" | "up">("in");
+const router = useRouter();
+
+onMounted(() => {
+  const visited = useCookie('visited', { maxAge: 60 * 60 * 24 * 30 });
+  
+  //if cookie "visited" does not exist, set it and switch to sign up :)
+
+  if (!visited.value) {
+    visited.value = 'true';
+    sign.value = 'up';
+  } else {                  //otherwise (visited before) default to sign in (huzzah)
+    sign.value = 'in';
+  }
+});
 
 watchEffect(() => {
   if (loggedIn.value) {
