@@ -14,7 +14,7 @@ const { register, authenticate } = useWebAuthn({
 
 const toast = useToast();
 const sign = ref<"in" | "up">("in");
-const router = useRouter();
+
 
 onMounted(() => {
   //Max cookie age is 30 days (represented in seconds)
